@@ -7,12 +7,12 @@
   <link rel="stylesheet" href="styles.css" />
   <style>
     .gpa-container {
-      max-width: 900px;
+      max-width: 1000px;
       margin: 2rem auto;
-      background: #fefefe;
+      background: linear-gradient(to right, #fdfbfb, #ebedee);
       padding: 2rem;
       border-radius: 12px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.15);
       animation: fadeIn 1s ease-in;
     }
     table {
@@ -27,7 +27,7 @@
       padding: 0.8rem;
       text-align: center;
     }
-    input {
+    input, select {
       padding: 0.4rem;
       width: 80%;
       border: 1px solid #ccc;
@@ -42,10 +42,11 @@
       background-color: #007bff;
       color: #fff;
       cursor: pointer;
-      transition: background 0.3s;
+      transition: background 0.3s, transform 0.2s;
     }
     .gpa-container button:hover {
       background-color: #0056b3;
+      transform: scale(1.05);
     }
     .result {
       margin-top: 1rem;
@@ -74,7 +75,7 @@
     }
   </style>
 </head>
-<body>
+<body onload="addRow()">
   <div class="nav">
     <a href="index.html">Home</a>
     <a href="advanced.html">Advanced AI</a>
@@ -87,12 +88,13 @@
   </div>
 
   <div class="gpa-container">
-    <h1 style="text-align:center">🎓 GPA Calculator</h1>
+    <h1 style="text-align:center">🎓 GPA Calculator (Advanced)</h1>
     <table id="gpaTable">
       <tr>
         <th>Subject</th>
         <th>Credits</th>
-        <th>Grade (e.g. A, B+)</th>
+        <th>Grade</th>
+        <th>Weighted?</th>
         <th>Action</th>
       </tr>
     </table>
@@ -117,7 +119,20 @@
       row.innerHTML = `
         <td><input type="text" placeholder="Subject"></td>
         <td><input type="number" min="1" placeholder="Credits"></td>
-        <td><input type="text" placeholder="Grade"></td>
+        <td>
+          <select>
+            <option value="">Grade</option>
+            <option value="A+">A+</option>
+            <option value="A">A</option>
+            <option value="B+">B+</option>
+            <option value="B">B</option>
+            <option value="C+">C+</option>
+            <option value="C">C</option>
+            <option value="D">D</option>
+            <option value="F">F</option>
+          </select>
+        </td>
+        <td><input type="checkbox"></td>
         <td><button onclick="this.parentElement.parentElement.remove()">❌</button></td>
       `;
     }
@@ -131,20 +146,24 @@
       for (const row of rows) {
         const subject = row.cells[0].children[0].value;
         const credits = parseFloat(row.cells[1].children[0].value);
-        const grade = row.cells[2].children[0].value.toUpperCase();
+        const grade = row.cells[2].children[0].value;
+        const weighted = row.cells[3].children[0].checked;
         const points = gradePoints[grade];
 
         if (!isNaN(credits) && points !== undefined) {
+          let finalPoints = points;
+          if (weighted) finalPoints += 0.5;
           totalCredits += credits;
-          totalPoints += credits * points;
+          totalPoints += credits * finalPoints;
           labels.push(subject || 'Subject');
-          data.push(points);
+          data.push(finalPoints);
         }
       }
 
       const gpa = (totalPoints / totalCredits).toFixed(2);
       document.getElementById("gpaResult").textContent = `Your GPA: ${isNaN(gpa) ? 'Invalid input' : gpa}`;
       drawChart(labels, data);
+      localStorage.setItem("lastGPA", gpa);
     }
 
     function drawChart(labels, data) {
@@ -157,12 +176,12 @@
           datasets: [{
             label: 'Grade Points',
             data: data,
-            backgroundColor: 'rgba(54, 162, 235, 0.7)',
+            backgroundColor: 'rgba(75, 192, 192, 0.6)',
             borderRadius: 5
           }]
         },
         options: {
-          scales: { y: { beginAtZero: true, max: 10 } }
+          scales: { y: { beginAtZero: true, max: 10.5 } }
         }
       });
     }
