@@ -9,6 +9,11 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.7.4/lottie.min.js"></script>
 </head>
 <body>
+  <!-- AI Background Animation -->
+  <video autoplay muted loop id="bg-video">
+    <source src="https://assets.mixkit.co/videos/preview/mixkit-digital-lines-moving-9739-large.mp4" type="video/mp4">
+  </video>
+
   <!-- Dark Mode Toggle -->
   <div class="dark-toggle">
     <label class="switch">
@@ -19,15 +24,14 @@
   </div>
 
   <div class="container">
-    <!-- Animated Header -->
     <div class="logo">
       <h1><span id="typed"></span></h1>
     </div>
 
-    <!-- Lottie AI animation -->
-    <div id="lottie-ai" style="height: 150px; margin-bottom: 20px;"></div>
+    <!-- Lottie AI Animation -->
+    <div id="lottie-ai" style="height: 150px;"></div>
 
-    <!-- Language and Type Options -->
+    <!-- Language and Search Type -->
     <div class="search-options">
       <select name="language" id="langSelect">
         <option value="">🌍 Language</option>
@@ -35,7 +39,6 @@
         <option value="hi">Hindi</option>
         <option value="es">Spanish</option>
       </select>
-
       <div class="tabs">
         <button onclick="setSearchType('web')">Web</button>
         <button onclick="setSearchType('isch')">Images</button>
@@ -44,8 +47,8 @@
       </div>
     </div>
 
-    <!-- Main Search Box -->
-    <form id="searchForm" action="https://www.google.com/search" method="GET" class="search-box">
+    <!-- Search Form -->
+    <form action="https://www.google.com/search" method="GET" class="search-box">
       <input type="text" name="q" id="searchInput" placeholder="Search smarter with AI..." required />
       <input type="hidden" name="tbm" id="searchType" />
       <div class="buttons">
@@ -55,12 +58,23 @@
       </div>
     </form>
 
-    <!-- Suggested Topics -->
+    <!-- AI Suggestions -->
     <div class="tool-tags">
       <span onclick="fillInput('AI Tools')">#AI Tools</span>
       <span onclick="fillInput('Python Projects')">#Python</span>
       <span onclick="fillInput('Frontend Templates')">#Web Design</span>
       <span onclick="fillInput('CS50 Harvard')">#CS50</span>
+      <span onclick="fillInput('Free Resume Builder')">#Resume AI</span>
+      <span onclick="fillInput('AI Video Generator')">#AI Video</span>
+    </div>
+
+    <!-- AI Tool Links -->
+    <div class="tool-links">
+      <a href="https://chat.openai.com" target="_blank">🧠 ChatGPT</a>
+      <a href="https://bard.google.com" target="_blank">🤖 Google Gemini</a>
+      <a href="https://sora.openai.com" target="_blank">🎬 Sora AI</a>
+      <a href="https://www.canva.com/ai-image-generator/" target="_blank">🎨 Canva AI</a>
+      <a href="https://runwayml.com" target="_blank">🎞️ Runway ML</a>
     </div>
 
     <!-- Footer -->
@@ -70,15 +84,15 @@
   </div>
 
   <script>
-    // Typed header
+    // Typed animation
     new Typed("#typed", {
-      strings: ["Welcome to Smart AI Search", "Designed by Tanishq Agrawal", "Powered by Voice & AI"],
+      strings: ["Welcome to Smart AI Search", "Designed by Tanishq Agrawal", "Powered by Voice & AI Tools"],
       typeSpeed: 50,
       backSpeed: 30,
       loop: true,
     });
 
-    // Fill input helper
+    // Fill input
     function fillInput(text) {
       document.getElementById("searchInput").value = text;
     }
@@ -88,7 +102,7 @@
       document.body.classList.toggle("dark-mode");
     });
 
-    // Voice search
+    // Voice recognition
     function startVoice() {
       const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
       recognition.lang = "en-IN";
@@ -98,15 +112,10 @@
       recognition.start();
     }
 
-    // Set search type (web/images/videos/news)
+    // Search type
     function setSearchType(type) {
-      const tbm = {
-        web: "",
-        isch: "isch",
-        vid: "vid",
-        nws: "nws",
-      };
-      document.getElementById("searchType").value = tbm[type] || "";
+      const tbm = { web: "", isch: "isch", vid: "vid", nws: "nws" };
+      document.getElementById("searchType").value = tbm[type];
     }
 
     // Lottie animation
