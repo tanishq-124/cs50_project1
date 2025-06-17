@@ -3,85 +3,80 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Smart AI Portal - Utility Tools > Resume</title>
+  <title>Resume Builder</title>
   <link rel="stylesheet" href="styles.css" />
   <style>
-    .resume-form {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      max-width: 600px;
-      margin: 2rem auto;
-      background: #f0f4ff;
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to bottom right, #6dd5ed, #2193b0);
+      margin: 0;
+      color: #333;
+    }
+    .container {
+      max-width: 900px;
+      margin: auto;
       padding: 2rem;
-      border-radius: 12px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      background: #fff;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      border-radius: 10px;
+      animation: fadeIn 0.8s ease;
     }
-    .resume-form input,
-    .resume-form textarea {
-      padding: 0.8rem;
+    h1 {
+      text-align: center;
+      color: #0077b6;
+    }
+    form input, form textarea {
+      width: 100%;
+      padding: 0.75rem;
+      margin-bottom: 1rem;
       border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 1rem;
+      border-radius: 6px;
     }
-    .resume-form button {
-      background-color: #007bff;
-      color: #fff;
+    form button {
+      background: #0077b6;
+      color: white;
+      padding: 0.75rem 1.5rem;
       border: none;
-      padding: 0.8rem;
       border-radius: 8px;
-      font-size: 1rem;
       cursor: pointer;
-      transition: 0.3s;
     }
-    .resume-form button:hover {
-      background-color: #0056b3;
-    }
-    .resume-output {
-      max-width: 700px;
-      margin: 2rem auto;
-      background: #e3f2fd;
-      padding: 1.5rem;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    #output {
+      margin-top: 2rem;
+      background: #f1f1f1;
+      padding: 1rem;
+      border-radius: 6px;
       white-space: pre-line;
     }
-    .nav {
-      background: #007bff;
-      color: white;
-      padding: 1rem;
-      text-align: center;
-    }
-    .nav a {
-      color: white;
-      margin: 0 1rem;
-      text-decoration: none;
-      font-weight: bold;
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(30px);}
+      to {opacity: 1; transform: translateY(0);}
     }
   </style>
 </head>
 <body>
-  <div class="nav">
-    <a href="index.html">Home</a>
-    <a href="advanced.html">Advanced AI</a>
-    <a href="resume.html">Resume</a>
-    <a href="planner.html">Planner</a>
-    <a href="notes.html">Notes</a>
-    <a href="quiz.html">Quiz</a>
-    <a href="image.html">Gallery</a>
-  </div>
-
   <div class="container">
-    <h1 style="text-align:center">📝 Resume Builder (Utility Tools)</h1>
-    <form id="resumeForm" class="resume-form">
-      <input type="text" id="name" placeholder="Full Name" required />
-      <input type="email" id="email" placeholder="Email Address" required />
-      <textarea id="education" placeholder="Education (e.g. B.Tech - CS, 2022)"></textarea>
-      <textarea id="experience" placeholder="Experience (e.g. Intern at Google)"></textarea>
-      <textarea id="skills" placeholder="Skills (e.g. Python, Web Dev)"></textarea>
+    <h1>Resume Builder</h1>
+    <form id="resumeForm">
+      <input type="text" placeholder="Full Name" id="name" required />
+      <input type="email" placeholder="Email Address" id="email" required />
+      <input type="text" placeholder="Phone Number" id="phone" required />
+      <input type="text" placeholder="LinkedIn / Portfolio Link" id="link" />
+      <textarea placeholder="Summary/About You" id="summary" rows="4"></textarea>
+      <textarea placeholder="Education" id="education" rows="3"></textarea>
+      <textarea placeholder="Experience" id="experience" rows="3"></textarea>
+      <textarea placeholder="Skills (comma separated)" id="skills"></textarea>
       <button type="submit">Generate Resume</button>
     </form>
-    <div id="resumeOutput" class="resume-output"></div>
+    <div id="output"></div>
+  </div>
+
+  <div class="ai-widget" onclick="toggleAIPopup()">🤖</div>
+  <div class="ai-popup" id="aiPopup">
+    <textarea id="aiInput" placeholder="Ask AI anything..."></textarea>
+    <input type="file" id="fileUpload" accept="image/*,application/pdf">
+    <input type="button" value="🎤 Speak" onclick="startSpeechToText()">
+    <button onclick="askAI()">Ask AI</button>
+    <div id="aiResponse" class="ai-response"></div>
   </div>
 
   <script>
@@ -89,24 +84,31 @@
       e.preventDefault();
       const name = document.getElementById('name').value;
       const email = document.getElementById('email').value;
+      const phone = document.getElementById('phone').value;
+      const link = document.getElementById('link').value;
+      const summary = document.getElementById('summary').value;
       const education = document.getElementById('education').value;
       const experience = document.getElementById('experience').value;
       const skills = document.getElementById('skills').value;
 
-      const output = `🔹 Name: ${name}
-🔹 Email: ${email}
+      const resume = `Name: ${name}\nEmail: ${email}\nPhone: ${phone}\nLink: ${link}\n\nSummary:\n${summary}\n\nEducation:\n${education}\n\nExperience:\n${experience}\n\nSkills:\n${skills}`;
 
-📘 Education:
-${education}
-
-💼 Experience:
-${experience}
-
-🧠 Skills:
-${skills}`;
-
-      document.getElementById('resumeOutput').innerText = output;
+      document.getElementById('output').innerText = resume;
     });
+
+    function toggleAIPopup() {
+      const popup = document.getElementById('aiPopup');
+      popup.style.display = popup.style.display === 'block' ? 'none' : 'block';
+    }
+
+    function askAI() {
+      const input = document.getElementById('aiInput').value;
+      document.getElementById('aiResponse').innerText = '🤖 AI: This is a mock response to: ' + input;
+    }
+
+    function startSpeechToText() {
+      alert("Voice input not enabled in this demo.");
+    }
   </script>
 </body>
 </html>
