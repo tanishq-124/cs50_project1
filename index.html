@@ -66,6 +66,7 @@
       font-size: 0.9rem;
     }
 
+    /* Floating AI Icon */
     .ai-icon {
       position: fixed;
       bottom: 20px;
@@ -80,19 +81,23 @@
       line-height: 55px;
       cursor: pointer;
       box-shadow: 0 8px 20px rgba(0, 230, 230, 0.4);
+      z-index: 999;
     }
 
+    /* AI Popup */
     .ai-popup {
       display: none;
       position: fixed;
-      bottom: 80px;
+      bottom: 90px;
       right: 20px;
       background: #fff;
       padding: 1rem;
-      border-radius: 10px;
+      border-radius: 12px;
       color: #000;
-      width: 300px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      width: 320px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      z-index: 998;
+      animation: slideUp 0.3s ease;
     }
 
     .ai-popup textarea {
@@ -101,6 +106,7 @@
       border-radius: 6px;
       border: 1px solid #ccc;
       margin-bottom: 0.5rem;
+      resize: none;
     }
 
     .ai-popup input[type="file"] {
@@ -114,6 +120,7 @@
       border-radius: 5px;
       cursor: pointer;
       margin-top: 0.3rem;
+      font-weight: bold;
     }
 
     @keyframes fadeIn {
@@ -123,6 +130,11 @@
 
     @keyframes slideDown {
       from { transform: translateY(-50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(20px); opacity: 0; }
       to { transform: translateY(0); opacity: 1; }
     }
   </style>
@@ -141,13 +153,16 @@
     <div class="tool"><h3><a href="ask.html">🤖 Ask AI</a></h3></div>
   </main>
 
+  <!-- Floating AI Widget Icon -->
   <div class="ai-icon" onclick="toggleAIPopup()">🤖</div>
 
+  <!-- AI Popup -->
   <div class="ai-popup" id="aiPopup">
-    <textarea placeholder="Ask AI anything..." rows="3"></textarea>
+    <textarea placeholder="Ask AI anything..." id="aiInput" rows="3"></textarea>
     <input type="file" accept="image/*,application/pdf" />
-    <button onclick="alert('Voice input not enabled in this demo')">🎤 Speak</button>
-    <button onclick="alert('AI will respond soon...')">Ask</button>
+    <button onclick="startVoice()">🎤 Speak</button>
+    <button onclick="askAI()">Ask</button>
+    <div id="aiResponse" style="margin-top: 10px;"></div>
   </div>
 
   <footer class="footer">
@@ -158,6 +173,23 @@
     function toggleAIPopup() {
       const popup = document.getElementById("aiPopup");
       popup.style.display = popup.style.display === "block" ? "none" : "block";
+    }
+
+    function startVoice() {
+      alert("Voice input coming soon!");
+    }
+
+    function askAI() {
+      const question = document.getElementById("aiInput").value;
+      const response = document.getElementById("aiResponse");
+      if (!question.trim()) {
+        response.innerHTML = "<i>Please enter a question.</i>";
+        return;
+      }
+      response.innerHTML = "🤖 Thinking...";
+      setTimeout(() => {
+        response.innerHTML = `🤖 AI: This is a simulated response to "<strong>${question}</strong>"`;
+      }, 1000);
     }
   </script>
 </body>
