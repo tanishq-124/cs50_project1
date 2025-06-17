@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Smart AI Portal - Resume</title>
+  <title>Smart AI Portal - Utility Tools > Resume</title>
   <link rel="stylesheet" href="styles.css" />
   <style>
     .resume-form {
@@ -12,7 +12,7 @@
       gap: 1rem;
       max-width: 600px;
       margin: 2rem auto;
-      background: #f9f9f9;
+      background: #f0f4ff;
       padding: 2rem;
       border-radius: 12px;
       box-shadow: 0 8px 20px rgba(0,0,0,0.1);
@@ -32,7 +32,7 @@
       border-radius: 8px;
       font-size: 1rem;
       cursor: pointer;
-      transition: background-color 0.3s;
+      transition: 0.3s;
     }
     .resume-form button:hover {
       background-color: #0056b3;
@@ -46,11 +46,33 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
       white-space: pre-line;
     }
+    .nav {
+      background: #007bff;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+    .nav a {
+      color: white;
+      margin: 0 1rem;
+      text-decoration: none;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
+  <div class="nav">
+    <a href="index.html">Home</a>
+    <a href="advanced.html">Advanced AI</a>
+    <a href="resume.html">Resume</a>
+    <a href="planner.html">Planner</a>
+    <a href="notes.html">Notes</a>
+    <a href="quiz.html">Quiz</a>
+    <a href="image.html">Gallery</a>
+  </div>
+
   <div class="container">
-    <h1 style="text-align:center">📝 Resume Builder</h1>
+    <h1 style="text-align:center">📝 Resume Builder (Utility Tools)</h1>
     <form id="resumeForm" class="resume-form">
       <input type="text" id="name" placeholder="Full Name" required />
       <input type="email" id="email" placeholder="Email Address" required />
