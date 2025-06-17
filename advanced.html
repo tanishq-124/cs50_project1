@@ -6,10 +6,203 @@
   <title>GPA Calculator</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
-<body>
-  <div class="container">
-    <h1>GPA Calculator</h1>
-    <p>Tool Coming Soon!</p>
+<body onload="addRow(); loadFromStorage()">
+  <div class="gpa-container">
+    <h1 style="text-align:center">🎓 GPA Calculator</h1>
+    <table id="gpaTable">
+      <tr>
+        <th>Subject</th>
+        <th>Credits</th>
+        <th>Grade</th>
+        <th>Remark</th>
+        <th>Action</th>
+      </tr>
+    </table>
+    <button onclick="addRow()">➕ Add Subject</button>
+    <button onclick="calculateGPA()">📊 Calculate GPA</button>
+    <button onclick="saveToStorage()">💾 Save</button>
+    <button onclick="downloadPDF()">📥 Export as PDF</button>
+    <button onclick="clearStorage()">🗑️ Clear History</button>
+
+    <div class="result" id="gpaResult"></div>
+
+    <div style="margin-top: 2rem">
+      <h3>🔁 GPA ↔ CGPA/SGPA/Percentage Converter</h3>
+      <input type="number" id="convertInput" placeholder="Enter GPA/CGPA/SGPA/Percentage">
+      <select id="convertType">
+        <option value="gpa-to-percent">GPA → Percentage</option>
+        <option value="percent-to-gpa">Percentage → GPA</option>
+        <option value="cgpa-to-gpa">CGPA → GPA</option>
+        <option value="gpa-to-cgpa">GPA → CGPA</option>
+      </select>
+      <button onclick="convertGPA()">Convert</button>
+      <p id="conversionResult"></p>
+    </div>
+
+    <canvas id="gpaChart" width="400" height="150"></canvas>
   </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script>
+    const gradePoints = {
+      'A+': 10, 'A': 9, 'B+': 8, 'B': 7,
+      'C+': 6, 'C': 5, 'D': 4, 'F': 0
+    };
+
+    function addRow() {
+      const table = document.getElementById("gpaTable");
+      const row = table.insertRow();
+      row.innerHTML = `
+        <td><input type="text" placeholder="Subject"></td>
+        <td><input type="number" min="1" placeholder="Credits"></td>
+        <td>
+          <select>
+            <option value="">Grade</option>
+            <option value="A+">A+</option>
+            <option value="A">A</option>
+            <option value="B+">B+</option>
+            <option value="B">B</option>
+            <option value="C+">C+</option>
+            <option value="C">C</option>
+            <option value="D">D</option>
+            <option value="F">F</option>
+          </select>
+        </td>
+        <td class="remark"></td>
+        <td><button onclick="this.parentElement.parentElement.remove()">❌</button></td>
+      `;
+    }
+
+    function calculateGPA() {
+      const rows = document.querySelectorAll("#gpaTable tr:not(:first-child)");
+      let totalCredits = 0;
+      let totalPoints = 0;
+      const labels = [], data = [];
+
+      for (const row of rows) {
+        const subject = row.cells[0].children[0].value;
+        const credits = parseFloat(row.cells[1].children[0].value);
+        const grade = row.cells[2].children[0].value;
+        const points = gradePoints[grade];
+
+        if (!isNaN(credits) && points !== undefined) {
+          totalCredits += credits;
+          totalPoints += credits * points;
+          labels.push(subject || 'Subject');
+          data.push(points);
+
+          const remarkCell = row.cells[3];
+          if (points >= 9) remarkCell.textContent = "Excellent";
+          else if (points >= 7) remarkCell.textContent = "Good";
+          else if (points >= 5) remarkCell.textContent = "Average";
+          else remarkCell.textContent = "Needs Improvement";
+        }
+      }
+
+      const gpa = (totalPoints / totalCredits).toFixed(2);
+      document.getElementById("gpaResult").textContent = `Your GPA: ${isNaN(gpa) ? 'Invalid input' : gpa}`;
+      drawChart(labels, data);
+    }
+
+    function drawChart(labels, data) {
+      const ctx = document.getElementById('gpaChart').getContext('2d');
+      if (window.barChart) window.barChart.destroy();
+      window.barChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Grade Points',
+            data: data,
+            backgroundColor: 'rgba(54, 162, 235, 0.7)',
+            borderRadius: 5
+          }]
+        },
+        options: {
+          scales: { y: { beginAtZero: true, max: 10 } }
+        }
+      });
+    }
+
+    function downloadPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      doc.text("GPA Report", 20, 20);
+      doc.html(document.querySelector(".gpa-container"), {
+        callback: function (doc) {
+          doc.save("GPA_Report.pdf");
+        },
+        x: 10, y: 30
+      });
+    }
+
+    function saveToStorage() {
+      const rows = document.querySelectorAll("#gpaTable tr:not(:first-child)");
+      const data = [];
+      for (const row of rows) {
+        data.push({
+          subject: row.cells[0].children[0].value,
+          credits: row.cells[1].children[0].value,
+          grade: row.cells[2].children[0].value
+        });
+      }
+      localStorage.setItem("gpaData", JSON.stringify(data));
+      alert("GPA data saved!");
+    }
+
+    function loadFromStorage() {
+      const saved = localStorage.getItem("gpaData");
+      if (!saved) return;
+      const data = JSON.parse(saved);
+      for (const item of data) {
+        addRow();
+        const lastRow = document.querySelectorAll("#gpaTable tr").at(-1);
+        lastRow.cells[0].children[0].value = item.subject;
+        lastRow.cells[1].children[0].value = item.credits;
+        lastRow.cells[2].children[0].value = item.grade;
+      }
+    }
+
+    function clearStorage() {
+      localStorage.removeItem("gpaData");
+      document.getElementById("gpaTable").innerHTML = `
+        <tr>
+          <th>Subject</th>
+          <th>Credits</th>
+          <th>Grade</th>
+          <th>Remark</th>
+          <th>Action</th>
+        </tr>`;
+      document.getElementById("gpaResult").textContent = '';
+      if (window.barChart) window.barChart.destroy();
+    }
+
+    function convertGPA() {
+      const input = parseFloat(document.getElementById("convertInput").value);
+      const type = document.getElementById("convertType").value;
+      let result = "";
+
+      if (isNaN(input)) {
+        result = "Please enter a valid number.";
+      } else {
+        switch (type) {
+          case "gpa-to-percent":
+            result = `Percentage: ${(input * 9.5).toFixed(2)}%`;
+            break;
+          case "percent-to-gpa":
+            result = `GPA: ${(input / 9.5).toFixed(2)}`;
+            break;
+          case "cgpa-to-gpa":
+            result = `GPA (approx): ${(input).toFixed(2)}`;
+            break;
+          case "gpa-to-cgpa":
+            result = `CGPA (approx): ${(input).toFixed(2)}`;
+            break;
+        }
+      }
+      document.getElementById("conversionResult").textContent = result;
+    }
+  </script>
 </body>
 </html>
