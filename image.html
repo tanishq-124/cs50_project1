@@ -1,21 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Image Search</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Image Search - Smart AI Search</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="nav">
-        <a href="index.html">Google Search</a>
+  <div class="container">
+    <div class="logo">
+      <h1>Image Search</h1>
     </div>
-    <div class="main">
-        <form action="https://www.google.com/images">
-            <input type="text" name="q" placeholder="Search Images...">
-            <div class="buttons">
-                <input type="submit" value="Image Search">
-            </div>
-        </form>
-    </div>
+    <form action="https://www.google.com/search" method="GET" class="search-box">
+      <input type="text" name="q" placeholder="Search images with AI..." required>
+      <input type="hidden" name="tbm" value="isch">
+      <div class="buttons">
+        <button type="submit">Search Images</button>
+      </div>
+    </form>
+    <footer>
+      <p>Created by <strong>Tanishq Agrawal</strong> • Explore images powered by Google and AI ✨</p>
+    </footer>
+  </div>
 </body>
 </html>
