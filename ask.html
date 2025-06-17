@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Ask AI - Smart Student Toolkit</title>
+  <title>Ask AI – Smart Student Toolkit</title>
   <style>
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to right, #1e3c72, #2a5298);
+      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
       color: #fff;
       display: flex;
       flex-direction: column;
@@ -18,12 +18,12 @@
     header {
       text-align: center;
       padding: 2rem;
-      background: rgba(0, 0, 0, 0.6);
+      background: rgba(0, 0, 0, 0.5);
     }
 
     header h1 {
       margin: 0;
-      font-size: 2.5rem;
+      font-size: 2.8rem;
     }
 
     .container {
@@ -32,7 +32,8 @@
       margin: 2rem auto;
       padding: 2rem;
       background: rgba(255, 255, 255, 0.1);
-      border-radius: 10px;
+      border-radius: 15px;
+      animation: fadeIn 1s ease;
     }
 
     textarea {
@@ -47,7 +48,7 @@
     }
 
     input[type="file"] {
-      margin-bottom: 1rem;
+      margin: 0.5rem 0;
     }
 
     button {
@@ -63,7 +64,7 @@
 
     .response-box {
       margin-top: 1.5rem;
-      background: rgba(255, 255, 255, 0.15);
+      background: rgba(0, 0, 0, 0.4);
       padding: 1rem;
       border-radius: 10px;
       white-space: pre-wrap;
@@ -83,6 +84,11 @@
       color: #00e6e6;
       text-decoration: none;
     }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
   </style>
 </head>
 <body>
@@ -91,57 +97,51 @@
   </header>
 
   <div class="container">
-    <textarea id="aiInput" placeholder="Ask anything..."></textarea>
+    <textarea id="aiInput" placeholder="Type your question here..."></textarea>
+    <br />
     <input type="file" id="fileUpload" accept="image/*,application/pdf" />
-    <br>
+    <br />
     <button onclick="startVoice()">🎤 Speak</button>
-    <button onclick="askAI()">Ask AI</button>
+    <button onclick="askAIMock()">Ask AI</button>
 
     <div class="response-box" id="aiResponse">🤖 Response will appear here...</div>
     <a class="back-link" href="index.html">← Back to Home</a>
   </div>
 
-  <footer>&copy; 2025 Smart Student Toolkit | Developed by Tanishq Agrawal</footer>
+  <footer>
+    &copy; 2025 Smart Student Toolkit | Developed by Tanishq Agrawal
+  </footer>
 
   <script>
-    async function askAI() {
+    function askAIMock() {
       const input = document.getElementById("aiInput").value.trim();
-      const responseBox = document.getElementById("aiResponse");
+      const output = document.getElementById("aiResponse");
 
       if (!input) {
-        responseBox.innerText = "❗ Please enter a question.";
+        output.innerText = "❗ Please type a question to ask AI.";
         return;
       }
 
-      responseBox.innerText = "⏳ Thinking...";
+      // Show loading message
+      output.innerText = "⏳ Thinking...";
 
-      try {
-        const result = await fetch("https://api.openai.com/v1/chat/completions", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": "Bearer YOUR_API_KEY_HERE"
-          },
-          body: JSON.stringify({
-            model: "gpt-3.5-turbo",
-            messages: [{ role: "user", content: input }]
-          })
-        });
+      // Simulate a smart AI response (mock)
+      setTimeout(() => {
+        const replies = [
+          "That's an interesting question! Let me explain...",
+          "Sure, here's what I found: ...",
+          "Hmm, based on what I know...",
+          "Here's a detailed response:\n\nLorem ipsum dolor sit amet...",
+          "This sounds like something from your syllabus. Here's what it means..."
+        ];
 
-        const data = await result.json();
-
-        if (data.choices && data.choices[0]) {
-          responseBox.innerText = "🤖 " + data.choices[0].message.content.trim();
-        } else {
-          responseBox.innerText = "❗ Error: No response received.";
-        }
-      } catch (error) {
-        responseBox.innerText = "❌ Error: " + error.message;
-      }
+        const randomReply = replies[Math.floor(Math.random() * replies.length)];
+        output.innerText = `🤖 ${randomReply}`;
+      }, 1000);
     }
 
     function startVoice() {
-      alert("🎤 Voice input coming soon!");
+      alert("🎤 Voice input feature coming soon!");
     }
   </script>
 </body>
