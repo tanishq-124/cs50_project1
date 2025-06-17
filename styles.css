@@ -1,27 +1,35 @@
 body {
   margin: 0;
-  padding: 0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(to bottom right, #e0f7fa, #ffffff);
+  background: linear-gradient(to right, #e0f7fa, #ffffff);
+  overflow-x: hidden;
   color: #202124;
+  position: relative;
+}
+
+.animated-bg {
+  position: fixed;
+  width: 100%;
+  height: 100vh;
+  background: radial-gradient(circle at 50% 50%, rgba(0, 200, 255, 0.1), transparent);
+  animation: pulse 6s ease-in-out infinite;
+  z-index: -1;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
 }
 
 .container {
+  padding: 2rem;
   max-width: 960px;
   margin: auto;
-  padding: 20px;
   text-align: center;
-}
-
-header h1 {
-  font-size: 2.5rem;
-  color: #0077c2;
-}
-
-.tagline {
-  font-size: 1.2rem;
-  color: #555;
-  margin-bottom: 20px;
 }
 
 .tool-grid {
@@ -35,7 +43,7 @@ header h1 {
   background: #ffffff;
   padding: 1rem;
   border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
   transition: transform 0.3s ease;
   min-width: 150px;
 }
@@ -45,39 +53,32 @@ header h1 {
   background: #e3f2fd;
 }
 
-footer {
-  margin-top: 40px;
-  font-size: 0.9rem;
-  color: #777;
-}
-
 .side-ai {
   position: fixed;
   top: 0;
   right: 0;
-  background: #f9f9f9;
   width: 300px;
-  height: 100%;
+  background: #ffffff;
+  height: 100vh;
   padding: 1rem;
-  box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+  box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+  z-index: 10;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  z-index: 1000;
 }
 
 .side-ai textarea {
   flex: 1;
   resize: none;
   padding: 0.5rem;
-  font-size: 1rem;
   border-radius: 8px;
   border: 1px solid #ccc;
 }
 
 .side-ai button {
-  padding: 0.6rem;
-  background-color: #0077c2;
+  padding: 0.5rem;
+  background: #0077c2;
   color: white;
   border: none;
   border-radius: 8px;
@@ -85,9 +86,9 @@ footer {
 }
 
 .ai-response {
+  padding: 0.5rem;
+  background: #f0f8ff;
+  border-radius: 8px;
   font-size: 0.9rem;
   color: #333;
-  background: #e1f5fe;
-  padding: 0.5rem;
-  border-radius: 8px;
 }
