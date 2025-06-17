@@ -3,69 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI Image Search</title>
+  <title>AI Animated Gallery</title>
   <link rel="stylesheet" href="styles.css" />
-  <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.7.4/lottie.min.js"></script>
+  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
 </head>
 <body>
-  <div class="dark-toggle">
-    <label class="switch">
-      <input type="checkbox" id="darkModeToggle" />
-      <span class="slider"></span>
-    </label>
-    <span>Dark Mode</span>
-  </div>
-
   <div class="container">
-    <div class="logo">
-      <h1><span id="typed"></span></h1>
-    </div>
-
-    <div id="lottie-ai" style="height: 150px; margin-bottom: 20px;"></div>
-
-    <form action="https://www.google.com/search" method="GET" class="search-box">
-      <input type="hidden" name="tbm" value="isch" />
-      <input type="text" name="q" placeholder="Search for AI-generated images..." required />
-      <div class="buttons">
-        <button type="submit">Search Images</button>
-      </div>
-    </form>
-
-    <div class="tool-tags">
-      <span onclick="fillInput('q','AI Robots')">#AI Robots</span>
-      <span onclick="fillInput('q','Nature')">#Nature</span>
-      <span onclick="fillInput('q','Cyberpunk City')">#Cyberpunk</span>
-    </div>
-
-    <footer>
-      <p>Created by <strong>Tanishq Agrawal</strong> • Explore AI visuals ✨</p>
-    </footer>
+    <h1>AI Animation Gallery</h1>
+    <lottie-player src="https://assets10.lottiefiles.com/packages/lf20_q5pk6p1k.json" background="transparent" speed="1" style="width: 300px; height: 300px;" loop autoplay></lottie-player>
+    <lottie-player src="https://assets10.lottiefiles.com/packages/lf20_jtbfg2nb.json" background="transparent" speed="1" style="width: 300px; height: 300px;" loop autoplay></lottie-player>
   </div>
-
-  <script>
-    new Typed("#typed", {
-      strings: ["Image Search Powered by AI", "Smart Visual Discovery", "Explore with Tanishq Agrawal"],
-      typeSpeed: 50,
-      backSpeed: 30,
-      loop: true,
-    });
-
-    function fillInput(fieldName, value) {
-      document.getElementsByName(fieldName)[0].value = value;
-    }
-
-    document.getElementById("darkModeToggle").addEventListener("change", () => {
-      document.body.classList.toggle("dark-mode");
-    });
-
-    bodymovin.loadAnimation({
-      container: document.getElementById("lottie-ai"),
-      renderer: "svg",
-      loop: true,
-      autoplay: true,
-      path: "https://assets1.lottiefiles.com/private_files/lf30_m6j5igxb.json",
-    });
-  </script>
 </body>
 </html>
