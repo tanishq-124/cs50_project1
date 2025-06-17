@@ -1,23 +1,21 @@
 # Smart AI Search Portal
 
 A modern multipurpose website with:
-- AI Side Search Box
-- Student and College Utility Tools
-- Animated UI with Lottie and Typed.js
-- Responsive and modern design
+- 🤖 AI Side Search Box
+- 🧮 Student and College Utility Tools
+- 🖼️ Animated Background and Lottie Animations
+- 🌐 Responsive and modern design
 
 ### Developer
 **Tanishq Agrawal**
 
 ### Features
 - 📚 GPA Calculator, Resume Builder, Planner
-- 🤖 AI Search Assistant
-- ✨ Lottie Animations
-- 🎨 Fully responsive and mobile-friendly
+- 💬 AI Chat Assistant
+- 🎨 Lottie & CSS animations
+- 🧠 AI-enhanced interactive tools
 
 ### How to Run
-1. Upload all files to GitHub.
-2. Enable GitHub Pages in your repo settings.
-3. Visit `https://yourusername.github.io/yourrepo/`.
-
-Enjoy a futuristic web experience!
+1. Upload files to GitHub repo.
+2. Enable GitHub Pages.
+3. Visit your live website at `https://yourusername.github.io/yourrepo/`
