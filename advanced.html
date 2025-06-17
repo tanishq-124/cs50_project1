@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GPA Calculator</title>
+  <title>Advanced GPA Calculator</title>
   <link rel="stylesheet" href="styles.css" />
   <style>
     body {
@@ -25,12 +25,24 @@
       border-radius: 12px;
       box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
       width: 90%;
-      max-width: 800px;
+      max-width: 900px;
     }
 
     h1 {
       text-align: center;
       color: #00796b;
+    }
+
+    .options {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    select, input[type="text"] {
+      padding: 0.4rem;
+      font-size: 1rem;
     }
 
     table {
@@ -46,7 +58,7 @@
     }
 
     button {
-      margin-top: 1rem;
+      margin: 0.5rem;
       padding: 0.6rem 1.2rem;
       background-color: #009688;
       color: white;
@@ -60,6 +72,18 @@
       background-color: #00796b;
     }
 
+    .controls {
+      text-align: center;
+      margin-top: 1rem;
+    }
+
+    #gpaResult {
+      font-weight: bold;
+      font-size: 1.2rem;
+      margin-top: 1rem;
+      color: #004d40;
+    }
+
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
@@ -69,6 +93,27 @@
 <body>
   <div class="calculator">
     <h1>🎓 GPA Calculator</h1>
+
+    <div class="options">
+      <label for="semester">Semester:
+        <select id="semester">
+          <option value="1">Semester 1</option>
+          <option value="2">Semester 2</option>
+          <option value="3">Semester 3</option>
+          <option value="4">Semester 4</option>
+        </select>
+      </label>
+
+      <label for="branch">Branch:
+        <select id="branch">
+          <option value="CSE">CSE</option>
+          <option value="ECE">ECE</option>
+          <option value="ME">ME</option>
+          <option value="CE">CE</option>
+        </select>
+      </label>
+    </div>
+
     <table id="gpaTable">
       <tr>
         <th>Subject</th>
@@ -77,9 +122,16 @@
         <th>Action</th>
       </tr>
     </table>
-    <button onclick="addRow()">➕ Add Subject</button>
-    <button onclick="fillAuto()">🤖 Auto Fill</button>
-    <button onclick="calculateGPA()">📊 Calculate GPA</button>
+
+    <div class="controls">
+      <button onclick="addRow()">➕ Add Subject</button>
+      <button onclick="fillAuto()">🤖 Auto Fill</button>
+      <button onclick="calculateGPA()">📊 Calculate GPA</button>
+      <button onclick="clearRows()">🧹 Clear All</button>
+      <button onclick="saveData()">💾 Save</button>
+      <button onclick="exportData()">📥 Export</button>
+    </div>
+
     <p id="gpaResult"></p>
   </div>
 
@@ -120,7 +172,6 @@
       let totalPoints = 0;
 
       rows.forEach(row => {
-        const subject = row.cells[0].children[0].value;
         const credits = parseFloat(row.cells[1].children[0].value);
         const grade = row.cells[2].children[0].value;
         const point = gradePoints[grade];
@@ -146,6 +197,44 @@
         </tr>
       `;
     }
+
+    function saveData() {
+      const rows = document.querySelectorAll('#gpaTable tr:not(:first-child)');
+      const data = Array.from(rows).map(row => ({
+        subject: row.cells[0].children[0].value,
+        credits: row.cells[1].children[0].value,
+        grade: row.cells[2].children[0].value
+      }));
+      localStorage.setItem('gpaData', JSON.stringify(data));
+      alert('Saved locally!');
+    }
+
+    function exportData() {
+      const rows = document.querySelectorAll('#gpaTable tr:not(:first-child)');
+      let csv = 'Subject,Credits,Grade\n';
+      rows.forEach(row => {
+        const subject = row.cells[0].children[0].value;
+        const credits = row.cells[1].children[0].value;
+        const grade = row.cells[2].children[0].value;
+        csv += `${subject},${credits},${grade}\n`;
+      });
+
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'gpa_data.csv';
+      a.click();
+    }
+
+    window.onload = function () {
+      const saved = localStorage.getItem('gpaData');
+      if (saved) {
+        const data = JSON.parse(saved);
+        clearRows();
+        data.forEach(row => addRow(row.subject, row.credits, row.grade));
+      }
+    };
   </script>
 </body>
 </html>
