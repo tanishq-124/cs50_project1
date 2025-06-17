@@ -2,136 +2,145 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Ask AI - Smart Assistant</title>
-  <link rel="stylesheet" href="styles.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ask AI - Smart Student Toolkit</title>
+  <link rel="stylesheet" href="styles.css" />
   <style>
     body {
       margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: url('bg-ai.jpg') no-repeat center center/cover;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to bottom right, #141e30, #243b55);
       color: #fff;
-      overflow-x: hidden;
-    }
-
-    .ai-icon {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      font-size: 2rem;
-      background: #0d47a1;
-      padding: 15px;
-      border-radius: 50%;
-      cursor: pointer;
-      z-index: 1000;
-      box-shadow: 0 0 15px #0d47a1;
-    }
-
-    .chat-popup {
-      display: none;
-      position: fixed;
-      bottom: 90px;
-      right: 20px;
-      background: #ffffff;
-      color: #000;
-      width: 350px;
-      max-width: 90%;
-      padding: 1rem;
-      border-radius: 15px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-      z-index: 999;
-      animation: slideUp 0.3s ease;
-    }
-
-    @keyframes slideUp {
-      from { transform: translateY(20px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
-
-    .chat-popup textarea {
-      width: 100%;
-      height: 80px;
-      margin-bottom: 10px;
-      padding: 10px;
-      resize: none;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      font-size: 0.95rem;
-    }
-
-    .chat-popup .tools {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
+      flex-direction: column;
+      min-height: 100vh;
     }
 
-    .chat-popup .tools input[type="file"],
-    .chat-popup .tools input[type="button"] {
-      font-size: 0.8rem;
+    header {
+      background: rgba(0, 0, 0, 0.7);
+      padding: 1rem 2rem;
+      text-align: center;
     }
 
-    .chat-popup button {
+    header h1 {
+      margin: 0;
+      font-size: 2.2rem;
+    }
+
+    .container {
+      flex-grow: 1;
+      max-width: 800px;
+      margin: 2rem auto;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      animation: fadeIn 0.6s ease;
+    }
+
+    textarea {
       width: 100%;
-      padding: 10px;
-      background: #1976d2;
-      color: white;
-      border: none;
+      height: 100px;
+      padding: 1rem;
       border-radius: 8px;
+      border: none;
+      resize: vertical;
+      font-size: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    input[type="file"] {
+      display: block;
+      margin-bottom: 1rem;
+    }
+
+    button {
+      background: #00e6e6;
+      border: none;
+      color: #000;
+      padding: 0.7rem 1.2rem;
+      font-size: 1rem;
+      border-radius: 6px;
       cursor: pointer;
+      margin-right: 0.5rem;
+    }
+
+    .response-box {
+      margin-top: 1.5rem;
+      background: rgba(255, 255, 255, 0.15);
+      padding: 1rem;
+      border-radius: 10px;
+      min-height: 100px;
+      white-space: pre-wrap;
+      font-family: monospace;
+      animation: fadeIn 1s ease;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 2rem;
+      color: #00e6e6;
+      text-decoration: none;
       font-weight: bold;
     }
 
-    #ai-response {
-      margin-top: 15px;
-      max-height: 150px;
-      overflow-y: auto;
-      font-size: 0.9rem;
-      color: #333;
+    .back-link:hover {
+      text-decoration: underline;
     }
 
-    @media (max-width: 480px) {
-      .chat-popup {
-        width: 95%;
-        right: 2.5%;
-      }
+    footer {
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.85rem;
+      background: rgba(0,0,0,0.5);
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(20px);}
+      to {opacity: 1; transform: translateY(0);}
     }
   </style>
 </head>
 <body>
+  <header>
+    <h1>Ask AI Assistant</h1>
+  </header>
 
-  <!-- Floating AI Icon -->
-  <div class="ai-icon" onclick="toggleChat()">🤖</div>
-
-  <!-- Chat Box -->
-  <div class="chat-popup" id="chatBox">
-    <textarea id="userInput" placeholder="Ask me anything..."></textarea>
-    <div class="tools">
-      <input type="file" id="fileUpload" />
-      <input type="button" value="🎤 Speak" onclick="startVoice()" />
-    </div>
+  <div class="container">
+    <textarea id="aiQuestion" placeholder="Ask me anything..."></textarea>
+    <input type="file" id="fileUpload" accept="image/*,application/pdf" />
+    <br />
+    <button onclick="startVoice()">🎤 Speak</button>
     <button onclick="askAI()">Ask AI</button>
-    <div id="ai-response"></div>
+
+    <div class="response-box" id="aiResponse">
+      🤖 AI Response will appear here...
+    </div>
+
+    <a href="index.html" class="back-link">← Back to Home</a>
   </div>
 
-  <script>
-    function toggleChat() {
-      const box = document.getElementById("chatBox");
-      box.style.display = box.style.display === "block" ? "none" : "block";
-    }
+  <footer>&copy; 2025 Smart Student Toolkit | Tanishq Agrawal</footer>
 
+  <script>
     function askAI() {
-      const input = document.getElementById("userInput").value.trim();
-      const responseBox = document.getElementById("ai-response");
-      if (!input) return;
-      responseBox.innerHTML = "<i>Thinking...</i>";
+      const question = document.getElementById('aiQuestion').value.trim();
+      const responseDiv = document.getElementById('aiResponse');
+
+      if (!question) {
+        responseDiv.innerText = "❗ Please enter a question.";
+        return;
+      }
+
+      // Simulated AI response
+      responseDiv.innerText = "⏳ Thinking...";
       setTimeout(() => {
-        responseBox.innerHTML = `<strong>AI:</strong> This is a simulated response to "<em>${input}</em>".`;
-      }, 1000);
+        responseDiv.innerText = "🤖 AI says: This is a mock response to: " + question;
+      }, 1200);
     }
 
     function startVoice() {
-      alert("Voice input is coming soon!");
+      alert("🎤 Voice input feature is coming soon!");
     }
   </script>
 </body>
