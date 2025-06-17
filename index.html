@@ -1,43 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Google Search Clone with AI prompts, animations, and modern design">
-    <title>Smart Search by Tanishq Agrawal</title>
-    <link rel="stylesheet" href="styles.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Smart AI Search</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.7.4/lottie.min.js"></script>
 </head>
 <body>
-    <div class="container">
-        <div class="logo">
-            <h1 class="animated-text"><span id="typed"></span></h1>
-        </div>
-        <img src="https://cdn.pixabay.com/photo/2023/04/11/08/59/artificial-intelligence-7915362_960_720.png" alt="AI Search" class="ai-image">
+  <div class="dark-toggle">
+    <label class="switch">
+      <input type="checkbox" id="darkModeToggle" />
+      <span class="slider"></span>
+    </label>
+    <span>Dark Mode</span>
+  </div>
 
-        <form action="https://www.google.com/search" method="GET" class="search-box">
-            <input type="text" name="q" placeholder="Search smarter with AI..." required />
-            <div class="suggestion">Try: <em>AI tools 2025</em>, <em>best coding practices</em>, <em>modern web development</em></div>
-            <div class="buttons">
-                <button type="submit">Google Search</button>
-                <button type="submit" name="btnI">I'm Feeling Lucky</button>
-            </div>
-        </form>
-
-        <footer>
-            <p>Developed by <strong>Tanishq Agrawal</strong> • Powered by ✨AI & Animations✨ • Project for CS50W</p>
-        </footer>
+  <div class="container">
+    <div class="logo">
+      <h1><span id="typed"></span></h1>
     </div>
 
-    <script>
-        new Typed("#typed", {
-            strings: ["Smart AI Search", "Your Intelligent Assistant", "Built by Tanishq Agrawal"],
-            typeSpeed: 60,
-            backSpeed: 40,
-            backDelay: 1500,
-            loop: true,
-        });
-    </script>
+    <div id="lottie-ai" style="height: 150px; margin-bottom: 20px;"></div>
+
+    <form action="https://www.google.com/search" method="GET" class="search-box">
+      <input type="text" name="q" placeholder="Search with AI magic..." required />
+      <div class="buttons">
+        <button type="submit">Google Search</button>
+        <button type="submit" name="btnI">I'm Feeling Lucky</button>
+      </div>
+    </form>
+
+    <div class="tool-tags">
+      <span onclick="fillInput('q','AI Tools')">#AITools</span>
+      <span onclick="fillInput('q','CS50 Projects')">#CS50</span>
+      <span onclick="fillInput('q','Frontend templates')">#WebDesign</span>
+    </div>
+
+    <footer>
+      <p>Created by <strong>Tanishq Agrawal</strong> • Powered by AI & Google 🚀</p>
+    </footer>
+  </div>
+
+  <script>
+    new Typed("#typed", {
+      strings: ["Welcome to Smart AI Search", "Made for CS50W", "Created by Tanishq Agrawal"],
+      typeSpeed: 50,
+      backSpeed: 30,
+      loop: true,
+    });
+
+    function fillInput(fieldName, value) {
+      document.getElementsByName(fieldName)[0].value = value;
+    }
+
+    document.getElementById("darkModeToggle").addEventListener("change", () => {
+      document.body.classList.toggle("dark-mode");
+    });
+
+    bodymovin.loadAnimation({
+      container: document.getElementById("lottie-ai"),
+      renderer: "svg",
+      loop: true,
+      autoplay: true,
+      path: "https://assets1.lottiefiles.com/private_files/lf30_m6j5igxb.json",
+    });
+  </script>
 </body>
 </html>
