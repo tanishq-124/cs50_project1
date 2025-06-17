@@ -33,18 +33,6 @@
       color: #00796b;
     }
 
-    .options {
-      display: flex;
-      justify-content: space-between;
-      gap: 1rem;
-      margin-bottom: 1rem;
-    }
-
-    select, input[type="text"] {
-      padding: 0.4rem;
-      font-size: 1rem;
-    }
-
     table {
       width: 100%;
       margin-top: 1rem;
@@ -84,6 +72,58 @@
       color: #004d40;
     }
 
+    .ai-widget {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #00bcd4;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      cursor: pointer;
+      z-index: 999;
+    }
+
+    .ai-widget:hover {
+      background: #0097a7;
+    }
+
+    .ai-popup {
+      display: none;
+      position: fixed;
+      bottom: 80px;
+      right: 20px;
+      background: white;
+      border: 1px solid #ccc;
+      padding: 1rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      width: 320px;
+    }
+
+    .ai-popup textarea {
+      width: 100%;
+      height: 80px;
+      resize: none;
+      margin-bottom: 0.5rem;
+    }
+
+    .ai-popup button {
+      width: 100%;
+    }
+
+    .ai-response {
+      margin-top: 0.5rem;
+      color: #333;
+      font-size: 0.95rem;
+      border-top: 1px solid #ccc;
+      padding-top: 0.5rem;
+    }
+
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
@@ -93,27 +133,6 @@
 <body>
   <div class="calculator">
     <h1>🎓 GPA Calculator</h1>
-
-    <div class="options">
-      <label for="semester">Semester:
-        <select id="semester">
-          <option value="1">Semester 1</option>
-          <option value="2">Semester 2</option>
-          <option value="3">Semester 3</option>
-          <option value="4">Semester 4</option>
-        </select>
-      </label>
-
-      <label for="branch">Branch:
-        <select id="branch">
-          <option value="CSE">CSE</option>
-          <option value="ECE">ECE</option>
-          <option value="ME">ME</option>
-          <option value="CE">CE</option>
-        </select>
-      </label>
-    </div>
-
     <table id="gpaTable">
       <tr>
         <th>Subject</th>
@@ -122,17 +141,20 @@
         <th>Action</th>
       </tr>
     </table>
-
     <div class="controls">
       <button onclick="addRow()">➕ Add Subject</button>
       <button onclick="fillAuto()">🤖 Auto Fill</button>
       <button onclick="calculateGPA()">📊 Calculate GPA</button>
       <button onclick="clearRows()">🧹 Clear All</button>
-      <button onclick="saveData()">💾 Save</button>
-      <button onclick="exportData()">📥 Export</button>
     </div>
-
     <p id="gpaResult"></p>
+  </div>
+
+  <div class="ai-widget" onclick="toggleAIPopup()">🤖</div>
+  <div class="ai-popup" id="aiPopup">
+    <textarea id="aiInput" placeholder="Ask AI anything about GPA, education, or more..."></textarea>
+    <button onclick="askAI()">Ask AI</button>
+    <div id="aiResponse" class="ai-response"></div>
   </div>
 
   <script>
@@ -198,43 +220,23 @@
       `;
     }
 
-    function saveData() {
-      const rows = document.querySelectorAll('#gpaTable tr:not(:first-child)');
-      const data = Array.from(rows).map(row => ({
-        subject: row.cells[0].children[0].value,
-        credits: row.cells[1].children[0].value,
-        grade: row.cells[2].children[0].value
-      }));
-      localStorage.setItem('gpaData', JSON.stringify(data));
-      alert('Saved locally!');
+    function toggleAIPopup() {
+      const popup = document.getElementById('aiPopup');
+      popup.style.display = popup.style.display === 'block' ? 'none' : 'block';
     }
 
-    function exportData() {
-      const rows = document.querySelectorAll('#gpaTable tr:not(:first-child)');
-      let csv = 'Subject,Credits,Grade\n';
-      rows.forEach(row => {
-        const subject = row.cells[0].children[0].value;
-        const credits = row.cells[1].children[0].value;
-        const grade = row.cells[2].children[0].value;
-        csv += `${subject},${credits},${grade}\n`;
-      });
-
-      const blob = new Blob([csv], { type: 'text/csv' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'gpa_data.csv';
-      a.click();
-    }
-
-    window.onload = function () {
-      const saved = localStorage.getItem('gpaData');
-      if (saved) {
-        const data = JSON.parse(saved);
-        clearRows();
-        data.forEach(row => addRow(row.subject, row.credits, row.grade));
+    function askAI() {
+      const query = document.getElementById('aiInput').value.trim();
+      const responseDiv = document.getElementById('aiResponse');
+      if (!query) {
+        responseDiv.textContent = 'Please enter a question.';
+        return;
       }
-    };
+      responseDiv.textContent = 'Thinking...';
+      setTimeout(() => {
+        responseDiv.textContent = `🧠 AI (mock): Based on your question "${query}", here's a helpful suggestion: Try breaking the problem into smaller parts or checking your GPA weight logic.`;
+      }, 1500);
+    }
   </script>
 </body>
 </html>
