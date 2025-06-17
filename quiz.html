@@ -14,7 +14,7 @@
       border-radius: 12px;
       box-shadow: 0 8px 20px rgba(0,0,0,0.1);
     }
-    .category-select {
+    .controls {
       margin-bottom: 1.5rem;
     }
     .question {
@@ -39,14 +39,9 @@
     .quiz-container button:hover {
       background-color: #0056b3;
     }
-    .result {
+    .result, .scorecard, .timer {
       margin-top: 1rem;
       font-weight: bold;
-    }
-    .scorecard {
-      margin-top: 1rem;
-      font-size: 1.1rem;
-      color: #333;
     }
     .nav {
       background: #007bff;
@@ -74,15 +69,27 @@
   </div>
 
   <div class="quiz-container">
-    <h1 style="text-align:center">🧠 Quiz Game</h1>
-    <div class="category-select">
-      <label for="category">Choose a category:</label>
-      <select id="category" onchange="loadQuiz()">
+    <h1 style="text-align:center">🧠 Advanced Quiz Game</h1>
+    <div class="controls">
+      <label for="category">Category:</label>
+      <select id="category">
         <option value="html">HTML</option>
         <option value="css">CSS</option>
         <option value="js">JavaScript</option>
       </select>
+      <label for="difficulty">Difficulty:</label>
+      <select id="difficulty">
+        <option value="easy">Easy</option>
+        <option value="medium">Medium</option>
+        <option value="hard">Hard</option>
+      </select>
+      <label for="numQuestions">Questions:</label>
+      <input type="number" id="numQuestions" value="2" min="1" max="10">
+      <label for="timerInput">Time (sec):</label>
+      <input type="number" id="timerInput" value="30" min="10" max="300">
+      <button onclick="startQuiz()">Start Quiz</button>
     </div>
+    <div class="timer" id="timer"></div>
     <div id="quizContent"></div>
     <div id="result" class="result"></div>
     <div id="scorecard" class="scorecard"></div>
@@ -91,90 +98,98 @@
   <script>
     const questions = {
       html: [
-        {
-          question: "What does HTML stand for?",
-          options: ["Hyper Trainer Marking Language", "Hyper Text Marketing Language", "Hyper Text Markup Language", "Hyper Text Mainframe Language"],
-          answer: 2
-        },
-        {
-          question: "Which tag is used for inserting an image in HTML?",
-          options: ["<img>", "<image>", "<src>", "<pic>"],
-          answer: 0
-        }
+        { question: "What does HTML stand for?", options: ["Hyper Trainer Marking Language", "Hyper Text Marketing Language", "Hyper Text Markup Language", "Hyper Text Mainframe Language"], answer: 2 },
+        { question: "Which tag is used for inserting an image in HTML?", options: ["<img>", "<image>", "<src>", "<pic>"], answer: 0 }
       ],
       css: [
-        {
-          question: "What does CSS stand for?",
-          options: ["Cascading Style Sheets", "Creative Style Scripts", "Computer Style Sheets", "Colorful Style Sheets"],
-          answer: 0
-        },
-        {
-          question: "Which property is used to change text color in CSS?",
-          options: ["text-color", "color", "font-color", "textStyle"],
-          answer: 1
-        }
+        { question: "What does CSS stand for?", options: ["Cascading Style Sheets", "Creative Style Scripts", "Computer Style Sheets", "Colorful Style Sheets"], answer: 0 },
+        { question: "Which property is used to change text color in CSS?", options: ["text-color", "color", "font-color", "textStyle"], answer: 1 }
       ],
       js: [
-        {
-          question: "Which is not a JavaScript data type?",
-          options: ["Number", "String", "Boolean", "Float"],
-          answer: 3
-        },
-        {
-          question: "Which function is used to print in JavaScript?",
-          options: ["print()", "console.print()", "log.console()", "console.log()"],
-          answer: 3
-        }
+        { question: "Which is not a JavaScript data type?", options: ["Number", "String", "Boolean", "Float"], answer: 3 },
+        { question: "Which function is used to print in JavaScript?", options: ["print()", "console.print()", "log.console()", "console.log()"], answer: 3 }
       ]
     };
 
-    let currentScore = 0;
+    let quizData = [];
+    let currentQuestion = 0;
+    let score = 0;
     let totalQuestions = 0;
+    let timerInterval;
 
-    function loadQuiz() {
+    function startQuiz() {
+      clearInterval(timerInterval);
       const category = document.getElementById('category').value;
-      const quizDiv = document.getElementById('quizContent');
-      const qList = questions[category];
-      const randomIndex = Math.floor(Math.random() * qList.length);
-      const qData = qList[randomIndex];
+      const count = parseInt(document.getElementById('numQuestions').value);
+      const time = parseInt(document.getElementById('timerInput').value);
 
-      quizDiv.innerHTML = `
-        <div class="question">${qData.question}</div>
-        <div class="options">
-          ${qData.options.map((opt, i) => `<label><input type='radio' name='q' value='${i}'> ${opt}</label>`).join('')}
-        </div>
-        <button onclick='submitAnswer(${qData.answer}, "${category}", ${randomIndex})'>Submit</button>
-      `;
+      quizData = [...questions[category]];
+      quizData = quizData.sort(() => 0.5 - Math.random()).slice(0, count);
+      currentQuestion = 0;
+      score = 0;
+      totalQuestions = quizData.length;
 
-      document.getElementById('result').innerHTML = '';
+      document.getElementById('scorecard').textContent = '';
+      loadQuestion();
+      startTimer(time);
     }
 
-    function submitAnswer(correctIndex, category, qIndex) {
-      const options = document.getElementsByName('q');
-      let result = document.getElementById('result');
-      let scorecard = document.getElementById('scorecard');
-
-      for (const option of options) {
-        if (option.checked) {
-          totalQuestions++;
-          if (parseInt(option.value) === correctIndex) {
-            currentScore++;
-            result.textContent = '✅ Correct!';
-            result.style.color = 'green';
-          } else {
-            result.textContent = '❌ Wrong!';
-            result.style.color = 'red';
-          }
-          scorecard.textContent = `Score: ${currentScore} / ${totalQuestions}`;
-          setTimeout(loadQuiz, 2000);
-          return;
+    function startTimer(seconds) {
+      let timeLeft = seconds;
+      document.getElementById('timer').textContent = `Time left: ${timeLeft}s`;
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        document.getElementById('timer').textContent = `Time left: ${timeLeft}s`;
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          endQuiz();
         }
-      }
-      result.textContent = 'Please select an option.';
-      result.style.color = 'orange';
+      }, 1000);
     }
 
-    loadQuiz();
+    function loadQuestion() {
+      const q = quizData[currentQuestion];
+      document.getElementById('quizContent').innerHTML = `
+        <div class="question">${q.question}</div>
+        <div class="options">
+          ${q.options.map((opt, i) => `<label><input type='radio' name='q' value='${i}'> ${opt}</label>`).join('')}
+        </div>
+        <button onclick='submitAnswer(${q.answer})'>Submit</button>
+      `;
+      document.getElementById('result').textContent = '';
+    }
+
+    function submitAnswer(correctIndex) {
+      const options = document.getElementsByName('q');
+      let selected = Array.from(options).find(r => r.checked);
+      if (!selected) {
+        document.getElementById('result').textContent = 'Please select an option.';
+        return;
+      }
+
+      if (parseInt(selected.value) === correctIndex) {
+        score++;
+        document.getElementById('result').textContent = '✅ Correct!';
+        document.getElementById('result').style.color = 'green';
+      } else {
+        document.getElementById('result').textContent = '❌ Wrong!';
+        document.getElementById('result').style.color = 'red';
+      }
+
+      currentQuestion++;
+      if (currentQuestion < quizData.length) {
+        setTimeout(loadQuestion, 1500);
+      } else {
+        clearInterval(timerInterval);
+        endQuiz();
+      }
+    }
+
+    function endQuiz() {
+      document.getElementById('quizContent').innerHTML = '<h2>Quiz Complete!</h2>';
+      document.getElementById('scorecard').textContent = `Final Score: ${score} / ${totalQuestions}`;
+      document.getElementById('timer').textContent = '';
+    }
   </script>
 </body>
 </html>
