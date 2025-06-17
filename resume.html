@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart AI Portal - Resume</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .resume-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      max-width: 600px;
+      margin: 2rem auto;
+      background: #f9f9f9;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+    .resume-form input,
+    .resume-form textarea {
+      padding: 0.8rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+    .resume-form button {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      padding: 0.8rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .resume-form button:hover {
+      background-color: #0056b3;
+    }
+    .resume-output {
+      max-width: 700px;
+      margin: 2rem auto;
+      background: #e3f2fd;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      white-space: pre-line;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 style="text-align:center">📝 Resume Builder</h1>
+    <form id="resumeForm" class="resume-form">
+      <input type="text" id="name" placeholder="Full Name" required />
+      <input type="email" id="email" placeholder="Email Address" required />
+      <textarea id="education" placeholder="Education (e.g. B.Tech - CS, 2022)"></textarea>
+      <textarea id="experience" placeholder="Experience (e.g. Intern at Google)"></textarea>
+      <textarea id="skills" placeholder="Skills (e.g. Python, Web Dev)"></textarea>
+      <button type="submit">Generate Resume</button>
+    </form>
+    <div id="resumeOutput" class="resume-output"></div>
+  </div>
+
+  <script>
+    document.getElementById('resumeForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const education = document.getElementById('education').value;
+      const experience = document.getElementById('experience').value;
+      const skills = document.getElementById('skills').value;
+
+      const output = `🔹 Name: ${name}
+🔹 Email: ${email}
+
+📘 Education:
+${education}
+
+💼 Experience:
+${experience}
+
+🧠 Skills:
+${skills}`;
+
+      document.getElementById('resumeOutput').innerText = output;
+    });
+  </script>
+</body>
+</html>
