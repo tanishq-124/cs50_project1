@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ask AI - Smart Assistant</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: url('bg-ai.jpg') no-repeat center center/cover;
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    .ai-icon {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      font-size: 2rem;
+      background: #0d47a1;
+      padding: 15px;
+      border-radius: 50%;
+      cursor: pointer;
+      z-index: 1000;
+      box-shadow: 0 0 15px #0d47a1;
+    }
+
+    .chat-popup {
+      display: none;
+      position: fixed;
+      bottom: 90px;
+      right: 20px;
+      background: #ffffff;
+      color: #000;
+      width: 350px;
+      max-width: 90%;
+      padding: 1rem;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      z-index: 999;
+      animation: slideUp 0.3s ease;
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .chat-popup textarea {
+      width: 100%;
+      height: 80px;
+      margin-bottom: 10px;
+      padding: 10px;
+      resize: none;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 0.95rem;
+    }
+
+    .chat-popup .tools {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .chat-popup .tools input[type="file"],
+    .chat-popup .tools input[type="button"] {
+      font-size: 0.8rem;
+    }
+
+    .chat-popup button {
+      width: 100%;
+      padding: 10px;
+      background: #1976d2;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    #ai-response {
+      margin-top: 15px;
+      max-height: 150px;
+      overflow-y: auto;
+      font-size: 0.9rem;
+      color: #333;
+    }
+
+    @media (max-width: 480px) {
+      .chat-popup {
+        width: 95%;
+        right: 2.5%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating AI Icon -->
+  <div class="ai-icon" onclick="toggleChat()">🤖</div>
+
+  <!-- Chat Box -->
+  <div class="chat-popup" id="chatBox">
+    <textarea id="userInput" placeholder="Ask me anything..."></textarea>
+    <div class="tools">
+      <input type="file" id="fileUpload" />
+      <input type="button" value="🎤 Speak" onclick="startVoice()" />
+    </div>
+    <button onclick="askAI()">Ask AI</button>
+    <div id="ai-response"></div>
+  </div>
+
+  <script>
+    function toggleChat() {
+      const box = document.getElementById("chatBox");
+      box.style.display = box.style.display === "block" ? "none" : "block";
+    }
+
+    function askAI() {
+      const input = document.getElementById("userInput").value.trim();
+      const responseBox = document.getElementById("ai-response");
+      if (!input) return;
+      responseBox.innerHTML = "<i>Thinking...</i>";
+      setTimeout(() => {
+        responseBox.innerHTML = `<strong>AI:</strong> This is a simulated response to "<em>${input}</em>".`;
+      }, 1000);
+    }
+
+    function startVoice() {
+      alert("Voice input is coming soon!");
+    }
+  </script>
+</body>
+</html>
