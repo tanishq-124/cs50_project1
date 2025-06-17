@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart AI Portal - GPA Calculator</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .gpa-container {
+      max-width: 900px;
+      margin: 2rem auto;
+      background: #fefefe;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      animation: fadeIn 1s ease-in;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+    table, th, td {
+      border: 1px solid #ccc;
+    }
+    th, td {
+      padding: 0.8rem;
+      text-align: center;
+    }
+    input {
+      padding: 0.4rem;
+      width: 80%;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .gpa-container button {
+      margin: 1rem 0.5rem 0 0;
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      background-color: #007bff;
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .gpa-container button:hover {
+      background-color: #0056b3;
+    }
+    .result {
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+    .nav {
+      background: #007bff;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+    .nav a {
+      color: white;
+      margin: 0 1rem;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    canvas {
+      margin-top: 2rem;
+      background: #f9f9f9;
+      border-radius: 10px;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="nav">
+    <a href="index.html">Home</a>
+    <a href="advanced.html">Advanced AI</a>
+    <a href="resume.html">Resume</a>
+    <a href="planner.html">Planner</a>
+    <a href="notes.html">Notes</a>
+    <a href="quiz.html">Quiz</a>
+    <a href="image.html">Gallery</a>
+    <a href="gpa.html">GPA Calculator</a>
+  </div>
+
+  <div class="gpa-container">
+    <h1 style="text-align:center">🎓 GPA Calculator</h1>
+    <table id="gpaTable">
+      <tr>
+        <th>Subject</th>
+        <th>Credits</th>
+        <th>Grade (e.g. A, B+)</th>
+        <th>Action</th>
+      </tr>
+    </table>
+    <button onclick="addRow()">➕ Add Subject</button>
+    <button onclick="calculateGPA()">📊 Calculate GPA</button>
+    <button onclick="downloadPDF()">💾 Export as PDF</button>
+    <div class="result" id="gpaResult"></div>
+    <canvas id="gpaChart" width="400" height="150"></canvas>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script>
+    const gradePoints = {
+      'A+': 10, 'A': 9, 'B+': 8, 'B': 7,
+      'C+': 6, 'C': 5, 'D': 4, 'F': 0
+    };
+
+    function addRow() {
+      const table = document.getElementById("gpaTable");
+      const row = table.insertRow();
+      row.innerHTML = `
+        <td><input type="text" placeholder="Subject"></td>
+        <td><input type="number" min="1" placeholder="Credits"></td>
+        <td><input type="text" placeholder="Grade"></td>
+        <td><button onclick="this.parentElement.parentElement.remove()">❌</button></td>
+      `;
+    }
+
+    function calculateGPA() {
+      const rows = document.querySelectorAll("#gpaTable tr:not(:first-child)");
+      let totalCredits = 0;
+      let totalPoints = 0;
+      const labels = [], data = [];
+
+      for (const row of rows) {
+        const subject = row.cells[0].children[0].value;
+        const credits = parseFloat(row.cells[1].children[0].value);
+        const grade = row.cells[2].children[0].value.toUpperCase();
+        const points = gradePoints[grade];
+
+        if (!isNaN(credits) && points !== undefined) {
+          totalCredits += credits;
+          totalPoints += credits * points;
+          labels.push(subject || 'Subject');
+          data.push(points);
+        }
+      }
+
+      const gpa = (totalPoints / totalCredits).toFixed(2);
+      document.getElementById("gpaResult").textContent = `Your GPA: ${isNaN(gpa) ? 'Invalid input' : gpa}`;
+      drawChart(labels, data);
+    }
+
+    function drawChart(labels, data) {
+      const ctx = document.getElementById('gpaChart').getContext('2d');
+      if (window.barChart) window.barChart.destroy();
+      window.barChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Grade Points',
+            data: data,
+            backgroundColor: 'rgba(54, 162, 235, 0.7)',
+            borderRadius: 5
+          }]
+        },
+        options: {
+          scales: { y: { beginAtZero: true, max: 10 } }
+        }
+      });
+    }
+
+    function downloadPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      doc.text("GPA Report", 20, 20);
+      doc.html(document.querySelector(".gpa-container"), {
+        callback: function (doc) {
+          doc.save("GPA_Report.pdf");
+        },
+        x: 10, y: 30
+      });
+    }
+  </script>
+</body>
+</html>
