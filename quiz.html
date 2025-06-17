@@ -7,12 +7,15 @@
   <link rel="stylesheet" href="styles.css" />
   <style>
     .quiz-container {
-      max-width: 700px;
+      max-width: 800px;
       margin: 2rem auto;
       background: #fefefe;
       padding: 2rem;
       border-radius: 12px;
       box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+    .category-select {
+      margin-bottom: 1.5rem;
     }
     .question {
       font-size: 1.2rem;
@@ -39,7 +42,11 @@
     .result {
       margin-top: 1rem;
       font-weight: bold;
-      color: green;
+    }
+    .scorecard {
+      margin-top: 1rem;
+      font-size: 1.1rem;
+      color: #333;
     }
     .nav {
       background: #007bff;
@@ -67,32 +74,107 @@
   </div>
 
   <div class="quiz-container">
-    <h1 style="text-align:center">🧠 Quick Quiz</h1>
-    <div class="question">What does HTML stand for?</div>
-    <div class="options">
-      <label><input type="radio" name="q1" value="wrong" /> Hyper Trainer Marking Language</label>
-      <label><input type="radio" name="q1" value="wrong" /> Hyper Text Marketing Language</label>
-      <label><input type="radio" name="q1" value="right" /> Hyper Text Markup Language</label>
-      <label><input type="radio" name="q1" value="wrong" /> Hyper Text Mainframe Language</label>
+    <h1 style="text-align:center">🧠 Quiz Game</h1>
+    <div class="category-select">
+      <label for="category">Choose a category:</label>
+      <select id="category" onchange="loadQuiz()">
+        <option value="html">HTML</option>
+        <option value="css">CSS</option>
+        <option value="js">JavaScript</option>
+      </select>
     </div>
-    <button onclick="checkAnswer()">Submit</button>
+    <div id="quizContent"></div>
     <div id="result" class="result"></div>
+    <div id="scorecard" class="scorecard"></div>
   </div>
 
   <script>
-    function checkAnswer() {
-      const options = document.getElementsByName('q1');
+    const questions = {
+      html: [
+        {
+          question: "What does HTML stand for?",
+          options: ["Hyper Trainer Marking Language", "Hyper Text Marketing Language", "Hyper Text Markup Language", "Hyper Text Mainframe Language"],
+          answer: 2
+        },
+        {
+          question: "Which tag is used for inserting an image in HTML?",
+          options: ["<img>", "<image>", "<src>", "<pic>"],
+          answer: 0
+        }
+      ],
+      css: [
+        {
+          question: "What does CSS stand for?",
+          options: ["Cascading Style Sheets", "Creative Style Scripts", "Computer Style Sheets", "Colorful Style Sheets"],
+          answer: 0
+        },
+        {
+          question: "Which property is used to change text color in CSS?",
+          options: ["text-color", "color", "font-color", "textStyle"],
+          answer: 1
+        }
+      ],
+      js: [
+        {
+          question: "Which is not a JavaScript data type?",
+          options: ["Number", "String", "Boolean", "Float"],
+          answer: 3
+        },
+        {
+          question: "Which function is used to print in JavaScript?",
+          options: ["print()", "console.print()", "log.console()", "console.log()"],
+          answer: 3
+        }
+      ]
+    };
+
+    let currentScore = 0;
+    let totalQuestions = 0;
+
+    function loadQuiz() {
+      const category = document.getElementById('category').value;
+      const quizDiv = document.getElementById('quizContent');
+      const qList = questions[category];
+      const randomIndex = Math.floor(Math.random() * qList.length);
+      const qData = qList[randomIndex];
+
+      quizDiv.innerHTML = `
+        <div class="question">${qData.question}</div>
+        <div class="options">
+          ${qData.options.map((opt, i) => `<label><input type='radio' name='q' value='${i}'> ${opt}</label>`).join('')}
+        </div>
+        <button onclick='submitAnswer(${qData.answer}, "${category}", ${randomIndex})'>Submit</button>
+      `;
+
+      document.getElementById('result').innerHTML = '';
+    }
+
+    function submitAnswer(correctIndex, category, qIndex) {
+      const options = document.getElementsByName('q');
       let result = document.getElementById('result');
+      let scorecard = document.getElementById('scorecard');
+
       for (const option of options) {
-        if (option.checked && option.value === 'right') {
-          result.textContent = 'Correct! 🎉';
-          result.style.color = 'green';
+        if (option.checked) {
+          totalQuestions++;
+          if (parseInt(option.value) === correctIndex) {
+            currentScore++;
+            result.textContent = '✅ Correct!';
+            result.style.color = 'green';
+          } else {
+            result.textContent = '❌ Wrong!';
+            result.style.color = 'red';
+          }
+          scorecard.textContent = `Score: ${currentScore} / ${totalQuestions}`;
+          setTimeout(loadQuiz, 2000);
           return;
         }
       }
-      result.textContent = 'Oops! Try again.';
-      result.style.color = 'red';
+      result.textContent = 'Please select an option.';
+      result.style.color = 'orange';
     }
+
+    loadQuiz();
   </script>
 </body>
 </html>
