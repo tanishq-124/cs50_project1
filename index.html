@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI Enhanced GPA Calculator</title>
+  <title>Smart AI Tools Hub</title>
   <link rel="stylesheet" href="styles.css" />
   <link rel="icon" href="favicon.ico">
 </head>
@@ -16,27 +16,48 @@
       <li><a href="notes.html">Notes</a></li>
       <li><a href="resume.html">Resume Builder</a></li>
       <li><a href="gpa.html">GPA Calculator</a></li>
+      <li><a href="advanced.html">AI Utilities</a></li>
+      <li><a href="image.html">Image Search</a></li>
     </ul>
   </nav>
 
-  <div class="calculator">
-    <h1>🎓 GPA Calculator</h1>
-    <table id="gpaTable">
-      <tr>
-        <th>Subject</th>
-        <th>Credits</th>
-        <th>Grade</th>
-        <th>Action</th>
-      </tr>
-    </table>
-    <div class="controls">
-      <button onclick="addRow()">➕ Add Subject</button>
-      <button onclick="fillAuto()">🤖 Auto Fill</button>
-      <button onclick="calculateGPA()">📊 Calculate GPA</button>
-      <button onclick="clearRows()">🧹 Clear All</button>
+  <section class="hero">
+    <h1>Welcome to Smart AI Tools</h1>
+    <p>Explore a powerful set of modern AI-driven educational and productivity tools for students and professionals.</p>
+  </section>
+
+  <section class="tools-grid">
+    <div class="tool-card">
+      <h3>📚 Quiz Generator</h3>
+      <p>Take dynamic quizzes across categories with timer, scorecard & explanation.</p>
+      <a href="quiz.html" class="btn">Start Quiz</a>
     </div>
-    <p id="gpaResult"></p>
-  </div>
+    <div class="tool-card">
+      <h3>📝 Smart Notes</h3>
+      <p>Create, save and review smart notes. AI helps summarize content.</p>
+      <a href="notes.html" class="btn">Open Notes</a>
+    </div>
+    <div class="tool-card">
+      <h3>📄 Resume Builder</h3>
+      <p>Generate professional resumes with AI guidance and modern templates.</p>
+      <a href="resume.html" class="btn">Build Resume</a>
+    </div>
+    <div class="tool-card">
+      <h3>🎓 GPA Calculator</h3>
+      <p>Calculate your GPA easily. Auto-fill, animation, and AI integration.</p>
+      <a href="gpa.html" class="btn">Calculate GPA</a>
+    </div>
+    <div class="tool-card">
+      <h3>🔧 AI Utilities</h3>
+      <p>Explore additional AI tools like reminders, converters, and calendars.</p>
+      <a href="advanced.html" class="btn">More Utilities</a>
+    </div>
+    <div class="tool-card">
+      <h3>🖼️ Image Search</h3>
+      <p>Search the web using AI-driven image recognition and graphics suggestions.</p>
+      <a href="image.html" class="btn">Search Images</a>
+    </div>
+  </section>
 
   <div class="ai-widget" onclick="toggleAIPopup()">🤖</div>
   <div class="ai-popup" id="aiPopup">
@@ -47,6 +68,10 @@
     <div id="aiResponse" class="ai-response"></div>
     <div class="history" id="chatHistory"></div>
   </div>
+
+  <footer>
+    <p>&copy; 2025 Smart AI Tools | Developed by Tanishq Agrawal</p>
+  </footer>
 
   <script src="ai-gpa.js"></script>
 </body>
