@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart AI Portal - Utility Tools > Quiz</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .quiz-container {
+      max-width: 700px;
+      margin: 2rem auto;
+      background: #fefefe;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+    .question {
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+    }
+    .options label {
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+    .quiz-container button {
+      margin-top: 1rem;
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      background-color: #007bff;
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .quiz-container button:hover {
+      background-color: #0056b3;
+    }
+    .result {
+      margin-top: 1rem;
+      font-weight: bold;
+      color: green;
+    }
+    .nav {
+      background: #007bff;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+    .nav a {
+      color: white;
+      margin: 0 1rem;
+      text-decoration: none;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="nav">
+    <a href="index.html">Home</a>
+    <a href="advanced.html">Advanced AI</a>
+    <a href="resume.html">Resume</a>
+    <a href="planner.html">Planner</a>
+    <a href="notes.html">Notes</a>
+    <a href="quiz.html">Quiz</a>
+    <a href="image.html">Gallery</a>
+  </div>
+
+  <div class="quiz-container">
+    <h1 style="text-align:center">🧠 Quick Quiz</h1>
+    <div class="question">What does HTML stand for?</div>
+    <div class="options">
+      <label><input type="radio" name="q1" value="wrong" /> Hyper Trainer Marking Language</label>
+      <label><input type="radio" name="q1" value="wrong" /> Hyper Text Marketing Language</label>
+      <label><input type="radio" name="q1" value="right" /> Hyper Text Markup Language</label>
+      <label><input type="radio" name="q1" value="wrong" /> Hyper Text Mainframe Language</label>
+    </div>
+    <button onclick="checkAnswer()">Submit</button>
+    <div id="result" class="result"></div>
+  </div>
+
+  <script>
+    function checkAnswer() {
+      const options = document.getElementsByName('q1');
+      let result = document.getElementById('result');
+      for (const option of options) {
+        if (option.checked && option.value === 'right') {
+          result.textContent = 'Correct! 🎉';
+          result.style.color = 'green';
+          return;
+        }
+      }
+      result.textContent = 'Oops! Try again.';
+      result.style.color = 'red';
+    }
+  </script>
+</body>
+</html>
