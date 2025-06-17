@@ -5,14 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Smart AI Portal - GPA Calculator</title>
   <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <style>
+    body.dark-mode { background-color: #121212; color: white; }
+    .dark-mode .gpa-container { background: #1f1f1f; color: white; }
     .gpa-container {
       max-width: 1000px;
       margin: 2rem auto;
-      background: linear-gradient(to right, #fdfbfb, #ebedee);
+      background: #fefefe;
       padding: 2rem;
       border-radius: 12px;
-      box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
       animation: fadeIn 1s ease-in;
     }
     table {
@@ -42,11 +46,10 @@
       background-color: #007bff;
       color: #fff;
       cursor: pointer;
-      transition: background 0.3s, transform 0.2s;
+      transition: background 0.3s;
     }
     .gpa-container button:hover {
       background-color: #0056b3;
-      transform: scale(1.05);
     }
     .result {
       margin-top: 1rem;
@@ -73,9 +76,13 @@
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
+    @media (max-width: 768px) {
+      .gpa-container { padding: 1rem; }
+      input, select { width: 100%; }
+    }
   </style>
 </head>
-<body onload="addRow()">
+<body onload="addRow(); loadFromStorage()">
   <div class="nav">
     <a href="index.html">Home</a>
     <a href="advanced.html">Advanced AI</a>
@@ -85,23 +92,42 @@
     <a href="quiz.html">Quiz</a>
     <a href="image.html">Gallery</a>
     <a href="gpa.html">GPA Calculator</a>
+    <button onclick="toggleDarkMode()">🌓 Toggle Mode</button>
   </div>
 
   <div class="gpa-container">
-    <h1 style="text-align:center">🎓 GPA Calculator (Advanced)</h1>
+    <h1 style="text-align:center">🎓 GPA Calculator</h1>
     <table id="gpaTable">
       <tr>
         <th>Subject</th>
         <th>Credits</th>
         <th>Grade</th>
-        <th>Weighted?</th>
+        <th>Remark</th>
         <th>Action</th>
       </tr>
     </table>
     <button onclick="addRow()">➕ Add Subject</button>
     <button onclick="calculateGPA()">📊 Calculate GPA</button>
-    <button onclick="downloadPDF()">💾 Export as PDF</button>
+    <button onclick="saveToStorage()">💾 Save</button>
+    <button onclick="downloadPDF()">📥 Export as PDF</button>
+    <button onclick="exportToExcel()">📊 Export as Excel</button>
+    <button onclick="clearStorage()">🗑️ Clear History</button>
+
     <div class="result" id="gpaResult"></div>
+
+    <div style="margin-top: 2rem">
+      <h3>🔁 GPA ↔ CGPA/SGPA/Percentage Converter</h3>
+      <input type="number" id="convertInput" placeholder="Enter GPA/CGPA/SGPA/Percentage">
+      <select id="convertType">
+        <option value="gpa-to-percent">GPA → Percentage</option>
+        <option value="percent-to-gpa">Percentage → GPA</option>
+        <option value="cgpa-to-gpa">CGPA → GPA</option>
+        <option value="gpa-to-cgpa">GPA → CGPA</option>
+      </select>
+      <button onclick="convertGPA()">Convert</button>
+      <p id="conversionResult"></p>
+    </div>
+
     <canvas id="gpaChart" width="400" height="150"></canvas>
   </div>
 
@@ -132,70 +158,24 @@
             <option value="F">F</option>
           </select>
         </td>
-        <td><input type="checkbox"></td>
+        <td class="remark"></td>
         <td><button onclick="this.parentElement.parentElement.remove()">❌</button></td>
       `;
     }
 
-    function calculateGPA() {
-      const rows = document.querySelectorAll("#gpaTable tr:not(:first-child)");
-      let totalCredits = 0;
-      let totalPoints = 0;
-      const labels = [], data = [];
-
-      for (const row of rows) {
+    function exportToExcel() {
+      const wb = XLSX.utils.book_new();
+      const rows = [["Subject", "Credits", "Grade", "Remark"]];
+      document.querySelectorAll("#gpaTable tr:not(:first-child)").forEach(row => {
         const subject = row.cells[0].children[0].value;
-        const credits = parseFloat(row.cells[1].children[0].value);
+        const credits = row.cells[1].children[0].value;
         const grade = row.cells[2].children[0].value;
-        const weighted = row.cells[3].children[0].checked;
-        const points = gradePoints[grade];
-
-        if (!isNaN(credits) && points !== undefined) {
-          let finalPoints = points;
-          if (weighted) finalPoints += 0.5;
-          totalCredits += credits;
-          totalPoints += credits * finalPoints;
-          labels.push(subject || 'Subject');
-          data.push(finalPoints);
-        }
-      }
-
-      const gpa = (totalPoints / totalCredits).toFixed(2);
-      document.getElementById("gpaResult").textContent = `Your GPA: ${isNaN(gpa) ? 'Invalid input' : gpa}`;
-      drawChart(labels, data);
-      localStorage.setItem("lastGPA", gpa);
-    }
-
-    function drawChart(labels, data) {
-      const ctx = document.getElementById('gpaChart').getContext('2d');
-      if (window.barChart) window.barChart.destroy();
-      window.barChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: labels,
-          datasets: [{
-            label: 'Grade Points',
-            data: data,
-            backgroundColor: 'rgba(75, 192, 192, 0.6)',
-            borderRadius: 5
-          }]
-        },
-        options: {
-          scales: { y: { beginAtZero: true, max: 10.5 } }
-        }
+        const remark = row.cells[3].textContent;
+        rows.push([subject, credits, grade, remark]);
       });
-    }
-
-    function downloadPDF() {
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
-      doc.text("GPA Report", 20, 20);
-      doc.html(document.querySelector(".gpa-container"), {
-        callback: function (doc) {
-          doc.save("GPA_Report.pdf");
-        },
-        x: 10, y: 30
-      });
+      const ws = XLSX.utils.aoa_to_sheet(rows);
+      XLSX.utils.book_append_sheet(wb, ws, "GPA Data");
+      XLSX.writeFile(wb, "GPA_Data.xlsx");
     }
   </script>
 </body>
