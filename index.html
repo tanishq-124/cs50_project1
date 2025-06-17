@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Google Search Clone with AI prompts and animations">
-    <title>Google AI Search</title>
+    <meta name="description" content="Google Search Clone with AI prompts, animations, and modern design">
+    <title>Smart Search by Tanishq Agrawal</title>
     <link rel="stylesheet" href="styles.css" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
@@ -14,22 +14,25 @@
         <div class="logo">
             <h1 class="animated-text"><span id="typed"></span></h1>
         </div>
+        <img src="https://cdn.pixabay.com/photo/2023/04/11/08/59/artificial-intelligence-7915362_960_720.png" alt="AI Search" class="ai-image">
+
         <form action="https://www.google.com/search" method="GET" class="search-box">
-            <input type="text" name="q" placeholder="Search with AI help..." required />
-            <div class="suggestion">Try: <em>latest AI tools 2025</em>, <em>how to learn Python fast</em></div>
+            <input type="text" name="q" placeholder="Search smarter with AI..." required />
+            <div class="suggestion">Try: <em>AI tools 2025</em>, <em>best coding practices</em>, <em>modern web development</em></div>
             <div class="buttons">
                 <button type="submit">Google Search</button>
                 <button type="submit" name="btnI">I'm Feeling Lucky</button>
             </div>
         </form>
+
         <footer>
-            <p>Made for CS50W • Includes AI-enhanced suggestions & animations ✨</p>
+            <p>Developed by <strong>Tanishq Agrawal</strong> • Powered by ✨AI & Animations✨ • Project for CS50W</p>
         </footer>
     </div>
 
     <script>
         new Typed("#typed", {
-            strings: ["Google AI Search", "Your Smart Search Begins Here", "Powered with ✨AI✨"],
+            strings: ["Smart AI Search", "Your Intelligent Assistant", "Built by Tanishq Agrawal"],
             typeSpeed: 60,
             backSpeed: 40,
             backDelay: 1500,
