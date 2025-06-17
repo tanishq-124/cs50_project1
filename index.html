@@ -9,6 +9,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.7.4/lottie.min.js"></script>
 </head>
 <body>
+  <!-- Dark Mode Toggle -->
   <div class="dark-toggle">
     <label class="switch">
       <input type="checkbox" id="darkModeToggle" />
@@ -18,53 +19,103 @@
   </div>
 
   <div class="container">
+    <!-- Animated Header -->
     <div class="logo">
       <h1><span id="typed"></span></h1>
     </div>
 
+    <!-- Lottie AI animation -->
     <div id="lottie-ai" style="height: 150px; margin-bottom: 20px;"></div>
 
-    <form action="https://www.google.com/search" method="GET" class="search-box">
-      <input type="text" name="q" placeholder="Search with AI magic..." required />
+    <!-- Language and Type Options -->
+    <div class="search-options">
+      <select name="language" id="langSelect">
+        <option value="">🌍 Language</option>
+        <option value="en">English</option>
+        <option value="hi">Hindi</option>
+        <option value="es">Spanish</option>
+      </select>
+
+      <div class="tabs">
+        <button onclick="setSearchType('web')">Web</button>
+        <button onclick="setSearchType('isch')">Images</button>
+        <button onclick="setSearchType('vid')">Videos</button>
+        <button onclick="setSearchType('nws')">News</button>
+      </div>
+    </div>
+
+    <!-- Main Search Box -->
+    <form id="searchForm" action="https://www.google.com/search" method="GET" class="search-box">
+      <input type="text" name="q" id="searchInput" placeholder="Search smarter with AI..." required />
+      <input type="hidden" name="tbm" id="searchType" />
       <div class="buttons">
-        <button type="submit">Google Search</button>
+        <button type="submit">Search</button>
         <button type="submit" name="btnI">I'm Feeling Lucky</button>
+        <button type="button" onclick="startVoice()">🎤 Voice</button>
       </div>
     </form>
 
+    <!-- Suggested Topics -->
     <div class="tool-tags">
-      <span onclick="fillInput('q','AI Tools')">#AITools</span>
-      <span onclick="fillInput('q','CS50 Projects')">#CS50</span>
-      <span onclick="fillInput('q','Frontend templates')">#WebDesign</span>
+      <span onclick="fillInput('AI Tools')">#AI Tools</span>
+      <span onclick="fillInput('Python Projects')">#Python</span>
+      <span onclick="fillInput('Frontend Templates')">#Web Design</span>
+      <span onclick="fillInput('CS50 Harvard')">#CS50</span>
     </div>
 
+    <!-- Footer -->
     <footer>
-      <p>Created by <strong>Tanishq Agrawal</strong> • Powered by AI & Google 🚀</p>
+      <p>Built by <strong>Tanishq Agrawal</strong> • Powered by AI 🚀</p>
     </footer>
   </div>
 
   <script>
+    // Typed header
     new Typed("#typed", {
-      strings: ["Welcome to Smart AI Search", "Made for CS50W", "Created by Tanishq Agrawal"],
+      strings: ["Welcome to Smart AI Search", "Designed by Tanishq Agrawal", "Powered by Voice & AI"],
       typeSpeed: 50,
       backSpeed: 30,
       loop: true,
     });
 
-    function fillInput(fieldName, value) {
-      document.getElementsByName(fieldName)[0].value = value;
+    // Fill input helper
+    function fillInput(text) {
+      document.getElementById("searchInput").value = text;
     }
 
+    // Dark mode toggle
     document.getElementById("darkModeToggle").addEventListener("change", () => {
       document.body.classList.toggle("dark-mode");
     });
 
+    // Voice search
+    function startVoice() {
+      const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+      recognition.lang = "en-IN";
+      recognition.onresult = (event) => {
+        document.getElementById("searchInput").value = event.results[0][0].transcript;
+      };
+      recognition.start();
+    }
+
+    // Set search type (web/images/videos/news)
+    function setSearchType(type) {
+      const tbm = {
+        web: "",
+        isch: "isch",
+        vid: "vid",
+        nws: "nws",
+      };
+      document.getElementById("searchType").value = tbm[type] || "";
+    }
+
+    // Lottie animation
     bodymovin.loadAnimation({
       container: document.getElementById("lottie-ai"),
       renderer: "svg",
       loop: true,
       autoplay: true,
-      path: "https://assets1.lottiefiles.com/private_files/lf30_m6j5igxb.json",
+      path: "https://assets10.lottiefiles.com/private_files/lf30_2gqznvcg.json"
     });
   </script>
 </body>
