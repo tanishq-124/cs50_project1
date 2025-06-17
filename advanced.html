@@ -77,8 +77,8 @@
       bottom: 20px;
       right: 20px;
       background: #00bcd4;
-      width: 50px;
-      height: 50px;
+      width: 45px;
+      height: 45px;
       border-radius: 50%;
       display: flex;
       align-items: center;
@@ -86,10 +86,7 @@
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
       cursor: pointer;
       z-index: 999;
-    }
-
-    .ai-widget:hover {
-      background: #0097a7;
+      font-size: 1.2rem;
     }
 
     .ai-popup {
@@ -103,13 +100,19 @@
       border-radius: 12px;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
       width: 320px;
+      z-index: 9999;
     }
 
     .ai-popup textarea {
       width: 100%;
-      height: 80px;
+      height: 60px;
       resize: none;
       margin-bottom: 0.5rem;
+    }
+
+    .ai-popup input[type="file"] {
+      margin-top: 0.5rem;
+      width: 100%;
     }
 
     .ai-popup button {
@@ -122,6 +125,21 @@
       font-size: 0.95rem;
       border-top: 1px solid #ccc;
       padding-top: 0.5rem;
+      max-height: 120px;
+      overflow-y: auto;
+    }
+
+    .ai-popup .history {
+      max-height: 100px;
+      overflow-y: auto;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+      border-top: 1px solid #eee;
+      padding-top: 0.5rem;
+    }
+
+    .ai-popup .history div {
+      margin-bottom: 0.4rem;
     }
 
     @keyframes fadeIn {
@@ -150,17 +168,21 @@
     <p id="gpaResult"></p>
   </div>
 
-  <div class="ai-widget" onclick="toggleAIPopup()">🤖</div>
+  <div class="ai-widget" onclick="toggleAIPopup()">💬</div>
   <div class="ai-popup" id="aiPopup">
-    <textarea id="aiInput" placeholder="Ask AI anything about GPA, education, or more..."></textarea>
+    <textarea id="aiInput" placeholder="Ask anything..."></textarea>
+    <button onclick="startSpeech()">🎤 Speak</button>
+    <input type="file" id="fileUpload" accept="image/*,application/pdf">
     <button onclick="askAI()">Ask AI</button>
     <div id="aiResponse" class="ai-response"></div>
+    <div class="history" id="chatHistory"></div>
   </div>
 
   <script>
     const gradePoints = { 'A+': 10, 'A': 9, 'B+': 8, 'B': 7, 'C': 6, 'D': 5, 'F': 0 };
     const sampleSubjects = ['Math', 'Physics', 'Chemistry', 'Biology', 'CS', 'English', 'History'];
     const sampleGrades = Object.keys(gradePoints);
+    const chatHistory = [];
 
     function addRow(subject = '', credits = '', grade = '') {
       const table = document.getElementById('gpaTable');
@@ -227,15 +249,53 @@
 
     function askAI() {
       const query = document.getElementById('aiInput').value.trim();
+      const file = document.getElementById('fileUpload').files[0];
       const responseDiv = document.getElementById('aiResponse');
-      if (!query) {
-        responseDiv.textContent = 'Please enter a question.';
+      const historyDiv = document.getElementById('chatHistory');
+
+      if (!query && !file) {
+        responseDiv.textContent = 'Please enter a question or upload a file.';
         return;
       }
+
       responseDiv.textContent = 'Thinking...';
       setTimeout(() => {
-        responseDiv.textContent = `🧠 AI (mock): Based on your question "${query}", here's a helpful suggestion: Try breaking the problem into smaller parts or checking your GPA weight logic.`;
+        let response = '';
+        if (file) {
+          response = `📎 Uploaded: "${file.name}". GPA autofill and image recognition coming soon.`;
+        } else {
+          response = `🧠 AI: You asked: "${query}". Here's a helpful suggestion.`;
+        }
+
+        responseDiv.textContent = response;
+        chatHistory.push({ q: query || file.name, a: response });
+        historyDiv.innerHTML = chatHistory.map(h => `<div><strong>Q:</strong> ${h.q}<br/><strong>A:</strong> ${h.a}</div>`).join('');
       }, 1500);
+    }
+
+    let recognition;
+    if ('webkitSpeechRecognition' in window) {
+      recognition = new webkitSpeechRecognition();
+      recognition.continuous = false;
+      recognition.interimResults = false;
+      recognition.lang = 'en-US';
+
+      recognition.onresult = function (event) {
+        const transcript = event.results[0][0].transcript;
+        document.getElementById('aiInput').value = transcript;
+      };
+
+      recognition.onerror = function (event) {
+        console.error('Speech recognition error', event.error);
+      };
+    }
+
+    function startSpeech() {
+      if (recognition) {
+        recognition.start();
+      } else {
+        alert("Speech recognition not supported in this browser.");
+      }
     }
   </script>
 </body>
