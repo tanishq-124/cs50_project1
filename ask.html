@@ -2,12 +2,14 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ask AI – Smart Student Toolkit</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
   <style>
     body {
       margin: 0;
-      font-family: 'Segoe UI', sans-serif;
+      font-family: 'Poppins', sans-serif;
       background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
       color: #fff;
       display: flex;
@@ -60,6 +62,7 @@
       font-size: 1rem;
       cursor: pointer;
       margin-right: 0.5rem;
+      font-weight: bold;
     }
 
     .response-box {
@@ -69,6 +72,7 @@
       border-radius: 10px;
       white-space: pre-wrap;
       font-family: monospace;
+      min-height: 100px;
     }
 
     footer {
@@ -92,17 +96,16 @@
   </style>
 </head>
 <body>
-  <header>
+  <header class="animate__animated animate__fadeInDown">
     <h1>Ask AI Assistant</h1>
   </header>
 
-  <div class="container">
+  <div class="container animate__animated animate__fadeInUp">
     <textarea id="aiInput" placeholder="Type your question here..."></textarea>
-    <br />
     <input type="file" id="fileUpload" accept="image/*,application/pdf" />
     <br />
     <button onclick="startVoice()">🎤 Speak</button>
-    <button onclick="askAIMock()">Ask AI</button>
+    <button onclick="askAI()">Ask</button>
 
     <div class="response-box" id="aiResponse">🤖 Response will appear here...</div>
     <a class="back-link" href="index.html">← Back to Home</a>
@@ -113,35 +116,51 @@
   </footer>
 
   <script>
-    function askAIMock() {
-      const input = document.getElementById("aiInput").value.trim();
-      const output = document.getElementById("aiResponse");
-
-      if (!input) {
-        output.innerText = "❗ Please type a question to ask AI.";
+    function startVoice() {
+      if (!('webkitSpeechRecognition' in window)) {
+        alert("🎤 Voice recognition not supported in this browser.");
         return;
       }
-
-      // Show loading message
-      output.innerText = "⏳ Thinking...";
-
-      // Simulate a smart AI response (mock)
-      setTimeout(() => {
-        const replies = [
-          "That's an interesting question! Let me explain...",
-          "Sure, here's what I found: ...",
-          "Hmm, based on what I know...",
-          "Here's a detailed response:\n\nLorem ipsum dolor sit amet...",
-          "This sounds like something from your syllabus. Here's what it means..."
-        ];
-
-        const randomReply = replies[Math.floor(Math.random() * replies.length)];
-        output.innerText = `🤖 ${randomReply}`;
-      }, 1000);
+      const recognition = new webkitSpeechRecognition();
+      recognition.lang = "en-US";
+      recognition.start();
+      recognition.onresult = function(event) {
+        document.getElementById("aiInput").value = event.results[0][0].transcript;
+      };
+      recognition.onerror = function(event) {
+        alert("Speech recognition error: " + event.error);
+      };
     }
 
-    function startVoice() {
-      alert("🎤 Voice input feature coming soon!");
+    async function askAI() {
+      const question = document.getElementById("aiInput").value;
+      const responseBox = document.getElementById("aiResponse");
+      if (!question.trim()) {
+        responseBox.innerText = "❗ Please type a question to ask AI.";
+        return;
+      }
+      responseBox.innerText = "⏳ Thinking...";
+
+      try {
+        const res = await fetch("https://api.openai.com/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer YOUR_OPENAI_API_KEY"
+          },
+          body: JSON.stringify({
+            model: "gpt-3.5-turbo",
+            messages: [{ role: "user", content: question }]
+          })
+        });
+
+        const data = await res.json();
+        const reply = data.choices?.[0]?.message?.content || "No response";
+        responseBox.innerText = `🤖 ${reply}`;
+      } catch (err) {
+        responseBox.innerText = "❌ Error reaching AI. Check your API key or connection.";
+        console.error(err);
+      }
     }
   </script>
 </body>
