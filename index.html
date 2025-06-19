@@ -1,226 +1,163 @@
-<!-- Final Rebuilt Smart Student Toolkit Homepage -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Smart Student Toolkit</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css"/>
-  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
-  <script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vanilla-tilt@1.7.2/dist/vanilla-tilt.min.js"></script>
-  <style>
-    /* Core layout styles */
-    body {
-      margin: 0;
-      font-family: 'Poppins', sans-serif;
-      background: radial-gradient(circle at top, #1b1b2f, #16213e);
-      color: #fff;
-      overflow-x: hidden;
-    }
-    header {
-      text-align: center;
-      padding: 4rem 1rem 2rem;
-      background: rgba(0, 0, 0, 0.5);
-    }
-    header h1 {
-      font-size: 3rem;
-      color: #00e6e6;
-    }
-    header p {
-      font-size: 1.2rem;
-      color: #ccc;
-    }
-    .tools-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 2rem;
-      padding: 3rem 2rem;
-      max-width: 1200px;
-      margin: auto;
-    }
-    .tool {
-      background: rgba(255, 255, 255, 0.06);
-      padding: 2rem;
-      border-radius: 20px;
-      text-align: center;
-      box-shadow: 0 0 15px rgba(0, 230, 230, 0.2);
-      transition: all 0.4s ease;
-    }
-    .tool:hover {
-      transform: perspective(800px) rotateY(5deg) rotateX(5deg);
-      box-shadow: 0 0 25px rgba(0, 230, 230, 0.4);
-    }
-    .tool a {
-      text-decoration: none;
-      font-size: 1.3rem;
-      font-weight: bold;
-      color: #00e6e6;
-    }
-    .floating-message {
-      position: fixed;
-      top: 80px;
-      left: 20px;
-      background: rgba(0, 230, 230, 0.15);
-      color: #00e6e6;
-      padding: 1rem 1.5rem;
-      border-radius: 15px;
-      font-size: 1rem;
-      box-shadow: 0 0 20px rgba(0, 230, 230, 0.3);
-      animation: floatMsg 6s infinite ease-in-out;
-      z-index: 2;
-    }
-    @keyframes floatMsg {
-      0% { transform: translateY(0); opacity: 1; }
-      50% { transform: translateY(-15px); opacity: 0.8; }
-      100% { transform: translateY(0); opacity: 1; }
-    }
-    .ai-icon {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      font-size: 2rem;
-      background: #00e6e6;
-      color: #000;
-      border-radius: 50%;
-      width: 55px;
-      height: 55px;
-      text-align: center;
-      line-height: 55px;
-      cursor: pointer;
-      z-index: 999;
-    }
-    .ai-popup {
-      display: none;
-      position: fixed;
-      bottom: 90px;
-      right: 20px;
-      background: #fff;
-      padding: 1rem;
-      border-radius: 12px;
-      color: #000;
-      width: 320px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-      z-index: 998;
-    }
-    .ai-popup textarea {
-      width: 100%;
-      height: 60px;
-      margin-bottom: 0.5rem;
-      border-radius: 6px;
-      padding: 0.5rem;
-    }
-    .ai-popup button {
-      background: #00e6e6;
-      width: 100%;
-      padding: 0.5rem;
-      border: none;
-      font-weight: bold;
-      border-radius: 5px;
-    }
-    .ai-popup .response {
-      margin-top: 0.5rem;
-      font-size: 0.9rem;
-    }
-  </style>
-</head>
-<body>
-  <div class="floating-message">💡 Tip: Hover over a tool to explore in 3D!</div>
-  <header>
-    <h1>Smart Student Toolkit</h1>
-    <p>Explore AI-powered tools for your academic success</p>
-  </header>
+<!-- Full Homepage: Smart Student Toolkit + Tools + AI + Full Medicaps Syllabus -->
+<div class="floating-message" style="position:fixed;top:80px;left:20px;background:rgba(0,230,230,0.15);color:#00e6e6;padding:1rem 1.5rem;border-radius:15px;font-size:1rem;box-shadow:0 0 20px rgba(0,230,230,0.3);animation:floatMsg 6s infinite ease-in-out;z-index:2;">
+  💡 Tip: Use the AI Assistant to ask for Medicaps notes, CGPA help, or syllabus guidance!
+</div>
 
-  <main class="tools-grid">
-    <div class="tool" data-tilt><a href="gpa.html">🎓 GPA Calculator</a></div>
-    <div class="tool" data-tilt><a href="resume.html">📄 Resume Builder</a></div>
-    <div class="tool" data-tilt><a href="quiz.html">🧠 Quiz Tool</a></div>
-    <div class="tool" data-tilt><a href="notes.html">📝 Notes Generator</a></div>
-    <div class="tool" data-tilt><a href="planner.html">📅 Study Planner</a></div>
-    <div class="tool" data-tilt><a href="ask.html">🤖 Ask AI</a></div>
-    <div class="tool" data-tilt><a href="image.html">🎨 AI Gallery</a></div>
-    <div class="tool" data-tilt><a href="advanced.html">📊 Advanced GPA</a></div>
-  </main>
-
-  <div class="ai-icon" onclick="toggleAI()">💬</div>
-  <div class="ai-popup" id="aiBox">
-    <textarea id="quickInput" placeholder="Ask AI..."></textarea>
-    <button onclick="askAI()">Ask</button>
-    <div class="response" id="aiResponse"></div>
-  </div>
-
-  <section class="testimonials">
-    <h2>📣 What Students Say</h2>
-    <div class="swiper">
-      <div class="swiper-wrapper">
-        <div class="swiper-slide">"This toolkit made my semester stress-free. GPA calculator is super accurate!"<strong>– Aarav, 2nd Year B.Tech</strong></div>
-        <div class="swiper-slide">"The AI assistant helped me draft my resume and even solved my DBMS doubts!"<strong>– Sneha, Final Year CS</strong></div>
-        <div class="swiper-slide">"All my academic tools in one place. Notes Generator is a lifesaver!"<strong>– Rahul, Diploma Student</strong></div>
-      </div>
+<!-- Tool Section (restored & simplified demo) -->
+<section style="padding: 3rem 2rem; text-align: center; background: #0a0a23;">
+  <h2 style="color:#00e6e6; font-size:2.2rem; margin-bottom:2rem;">🔧 Tools for Every Student</h2>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:2rem;max-width:1100px;margin:auto;">
+    <div class="tool" style="background:#111;padding:2rem;border-radius:16px;transition:all 0.3s;transform-style:preserve-3d;cursor:pointer;box-shadow:0 0 15px rgba(0,230,230,0.2);">
+      <a href="gpa.html" style="color:#00e6e6;text-decoration:none;font-size:1.2rem;">🎓 GPA Calculator</a>
     </div>
-  </section>
+    <div class="tool" style="background:#111;padding:2rem;border-radius:16px;transition:all 0.3s;transform-style:preserve-3d;cursor:pointer;box-shadow:0 0 15px rgba(0,230,230,0.2);">
+      <a href="resume.html" style="color:#00e6e6;text-decoration:none;font-size:1.2rem;">📄 Resume Builder</a>
+    </div>
+    <div class="tool" style="background:#111;padding:2rem;border-radius:16px;transition:all 0.3s;transform-style:preserve-3d;cursor:pointer;box-shadow:0 0 15px rgba(0,230,230,0.2);">
+      <a href="quiz.html" style="color:#00e6e6;text-decoration:none;font-size:1.2rem;">🧠 Quiz Tool</a>
+    </div>
+    <div class="tool" style="background:#111;padding:2rem;border-radius:16px;transition:all 0.3s;transform-style:preserve-3d;cursor:pointer;box-shadow:0 0 15px rgba(0,230,230,0.2);">
+      <a href="notes.html" style="color:#00e6e6;text-decoration:none;font-size:1.2rem;">📝 Notes Generator</a>
+    </div>
+    <div class="tool" style="background:#111;padding:2rem;border-radius:16px;transition:all 0.3s;transform-style:preserve-3d;cursor:pointer;box-shadow:0 0 15px rgba(0,230,230,0.2);">
+      <a href="planner.html" style="color:#00e6e6;text-decoration:none;font-size:1.2rem;">📅 Study Planner</a>
+    </div>
+    <div class="tool" style="background:#111;padding:2rem;border-radius:16px;transition:all 0.3s;transform-style:preserve-3d;cursor:pointer;box-shadow:0 0 15px rgba(0,230,230,0.2);">
+      <a href="ask.html" style="color:#00e6e6;text-decoration:none;font-size:1.2rem;">🤖 Ask AI</a>
+    </div>
+  </div>
+</section>
 
-  <section class="feedback-form">
-    <h2>💬 Share Your Experience</h2>
-    <form onsubmit="submitFeedback(event)">
-      <input type="text" id="name" placeholder="Your Name" required>
-      <input type="text" id="designation" placeholder="Your Year & Course" required>
-      <textarea id="message" rows="4" placeholder="Write your feedback..." required></textarea>
-      <button type="submit">Submit Feedback</button>
-    </form>
-  </section>
+<!-- AI Assistant Icon -->
+<div class="ai-icon" onclick="document.getElementById('aiBox').style.display='block';" style="position:fixed;bottom:20px;right:20px;background:#00e6e6;color:#000;width:55px;height:55px;border-radius:50%;text-align:center;line-height:55px;font-size:1.5rem;cursor:pointer;z-index:9999;">
+  💬
+</div>
+<div class="ai-popup" id="aiBox" style="display:none;position:fixed;bottom:90px;right:20px;background:#fff;color:#000;padding:1rem;width:320px;border-radius:12px;box-shadow:0 8px 20px rgba(0,0,0,0.3);z-index:999;">
+  <textarea id="quickInput" placeholder="Ask AI for syllabus or notes..." style="width:100%;height:60px;padding:0.5rem;margin-bottom:0.5rem;border-radius:6px;"></textarea>
+  <button onclick="askAI()" style="width:100%;padding:0.5rem;background:#00e6e6;border:none;font-weight:bold;cursor:pointer;">Ask</button>
+  <div id="aiResponse" style="margin-top:0.5rem;font-size:0.9rem;"></div>
+</div>
 
-  <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
-  <script>
-    const swiper = new Swiper('.swiper', {
-      loop: true,
-      autoplay: { delay: 4000 },
-      effect: 'fade',
-      fadeEffect: { crossFade: true },
-    });
+<!-- Medicaps University Syllabus Section -->
+<section style="padding:4rem 2rem; background:#10101a;">
+  <h2 style="text-align:center; color:#00e6e6; font-size:2rem; margin-bottom:2rem;">🏫 Medicaps CSE – Full Semester-wise Subjects & Notes</h2>
+  <div style="max-width:1100px;margin:auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:2rem;">
+    <div style="background:#181818;border-radius:15px;padding:1rem;">
+      <h3 style="color:#00e6e6;">Semester 1</h3>
+      <ul style="padding:0;list-style:none;">
+        <li>🧪 Engineering Chemistry</li>
+        <li>📐 Engineering Mathematics-I</li>
+        <li>🖋️ Communication Skills</li>
+        <li>🔧 Engineering Graphics</li>
+        <li>🔌 Basic Electrical Engineering - <a href="https://drive.google.com/drive/folders/12ymPrloFllYwHVM6VNiNX3624LuJVorP" target="_blank">Notes</a></li>
+        <li>🧫 Chemistry Lab</li>
+        <li>💡 BEE Lab</li>
+      </ul>
+    </div>
+    <div style="background:#181818;border-radius:15px;padding:1rem;">
+      <h3 style="color:#00e6e6;">Semester 2</h3>
+      <ul style="padding:0;list-style:none;">
+        <li>📘 Engineering Physics</li>
+        <li>📐 Engineering Mathematics-II</li>
+        <li>⚙️ Engineering Mechanics</li>
+        <li>💻 Programming in C</li>
+        <li>🛠️ Workshop Practice</li>
+        <li>🧪 Physics Lab</li>
+        <li>💻 C Programming Lab</li>
+      </ul>
+    </div>
+    <div style="background:#181818;border-radius:15px;padding:1rem;">
+      <h3 style="color:#00e6e6;">Semester 3</h3>
+      <ul style="padding:0;list-style:none;">
+        <li>🧠 Data Structures</li>
+        <li>🧮 Discrete Mathematics</li>
+        <li>🖥️ Digital Electronics</li>
+        <li>📜 Object Oriented Programming</li>
+        <li>🧪 Data Structures Lab</li>
+        <li>💻 OOP Lab</li>
+      </ul>
+    </div>
+    <div style="background:#181818;border-radius:15px;padding:1rem;">
+      <h3 style="color:#00e6e6;">Semester 4</h3>
+      <ul style="padding:0;list-style:none;">
+        <li>📡 Computer Networks</li>
+        <li>⚙️ Operating Systems</li>
+        <li>🧠 Database Management Systems</li>
+        <li>🔤 Theory of Computation</li>
+        <li>🧪 DBMS Lab</li>
+        <li>🧪 CN Lab</li>
+      </ul>
+    </div>
+    <div style="background:#181818;border-radius:15px;padding:1rem;">
+      <h3 style="color:#00e6e6;">Semester 5</h3>
+      <ul style="padding:0;list-style:none;">
+        <li>🌐 Web Technologies</li>
+        <li>🧑‍💻 Software Engineering</li>
+        <li>📊 Artificial Intelligence</li>
+        <li>📁 Compiler Design</li>
+        <li>🧪 Web Tech Lab</li>
+        <li>🧪 AI Lab</li>
+      </ul>
+    </div>
+    <div style="background:#181818;border-radius:15px;padding:1rem;">
+      <h3 style="color:#00e6e6;">Semester 6</h3>
+      <ul style="padding:0;list-style:none;">
+        <li>🔐 Cyber Security</li>
+        <li>📱 Mobile App Development</li>
+        <li>📉 Design and Analysis of Algorithms</li>
+        <li>📂 Distributed Systems</li>
+        <li>🧪 DAA Lab</li>
+        <li>📱 Mobile App Lab</li>
+      </ul>
+    </div>
+    <div style="background:#181818;border-radius:15px;padding:1rem;">
+      <h3 style="color:#00e6e6;">Semester 7</h3>
+      <ul style="padding:0;list-style:none;">
+        <li>🧠 Machine Learning</li>
+        <li>📈 Data Analytics</li>
+        <li>📚 Project Phase I</li>
+        <li>🧪 ML Lab</li>
+        <li>🧪 Analytics Lab</li>
+      </ul>
+    </div>
+    <div style="background:#181818;border-radius:15px;padding:1rem;">
+      <h3 style="color:#00e6e6;">Semester 8</h3>
+      <ul style="padding:0;list-style:none;">
+        <li>🧪 Major Project</li>
+        <li>📝 Comprehensive Viva</li>
+        <li>📖 Open Elective</li>
+        <li>🧾 Seminar</li>
+      </ul>
+    </div>
+  </div>
+  <p style="text-align:center;color:#ccc;margin-top:2rem;">📊 CGPA = (Total Grade Points / Total Credits) × 10</p>
+</section>
 
-    function submitFeedback(event) {
-      event.preventDefault();
-      const name = document.getElementById('name').value;
-      const course = document.getElementById('designation').value;
-      const message = document.getElementById('message').value;
-      alert(`✅ Thanks ${name}! Your feedback has been received.`);
-      document.querySelector('form').reset();
-    }
+<!-- AI Integration Script -->
+<script>
+function askAI() {
+  const input = document.getElementById('quickInput').value;
+  const output = document.getElementById('aiResponse');
+  if (!input.trim()) return output.textContent = 'Please enter a question.';
+  output.textContent = 'Thinking...';
+  fetch('https://api.openai.com/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer YOUR_OPENAI_API_KEY'
+    },
+    body: JSON.stringify({
+      model: 'gpt-4',
+      messages: [{ role: 'user', content: input }]
+    })
+  })
+  .then(res => res.json())
+  .then(data => output.textContent = data.choices?.[0]?.message?.content || 'No reply.')
+  .catch(() => output.textContent = 'Error connecting to AI.');
+}
+</script>
 
-    function toggleAI() {
-      const box = document.getElementById('aiBox');
-      box.style.display = box.style.display === 'block' ? 'none' : 'block';
-    }
-
-    async function askAI() {
-      const input = document.getElementById("quickInput").value;
-      const output = document.getElementById("aiResponse");
-      if (!input.trim()) {
-        output.textContent = '❗ Enter a question first.';
-        return;
-      }
-      output.textContent = '🤖 Thinking...';
-      try {
-        const res = await fetch("https://api.openai.com/v1/chat/completions", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": "Bearer YOUR_OPENAI_API_KEY"
-          },
-          body: JSON.stringify({
-            model: "gpt-4",
-            messages: [{ role: "user", content: input }]
-          })
-        });
-        const data = await res.json();
-        const reply = data.choices?.[0]?.message?.content || "No reply.";
-        output.innerHTML = `<strong>AI:</strong> ${reply}`;
-      } catch (err) {
-        output.textContent = '❌ Error contacting AI.';
-      }
-    }
-  </script>
-</body>
-</html>
+<!-- Optional: Add 3D hover JS -->
+<script>
+VanillaTilt.init(document.querySelectorAll(".tool"), { max: 15, speed: 400, glare: true, "max-glare": 0.2 });
+</script>
