@@ -1,72 +1,68 @@
+<!-- Enhanced and modernized version of index.html with effects, animations, voice input, and real AI API integration -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Smart Student Utility Hub</title>
-  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
   <style>
     body {
       margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: url('https://images.unsplash.com/photo-1526401485004-2fa806b5e386?auto=format&fit=crop&w=1400&q=80') no-repeat center center fixed;
-      background-size: cover;
-      color: #fff;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to right, #1c1c1c, #323232);
+      color: #ffffff;
       overflow-x: hidden;
     }
-
     header {
       text-align: center;
       padding: 3rem 1rem 1rem;
       background: rgba(0, 0, 0, 0.6);
+      animation: slideInDown 1s ease;
     }
-
     header h1 {
       font-size: 3rem;
-      margin-bottom: 0.5rem;
-      animation: slideDown 1s ease;
+      margin-bottom: 0.3rem;
     }
-
+    header p {
+      font-size: 1.2rem;
+      color: #ccc;
+    }
     .tools-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
       gap: 2rem;
       padding: 3rem;
+      animation: fadeIn 2s ease-in;
     }
-
     .tool {
-      background: rgba(0, 0, 0, 0.7);
+      background: rgba(255, 255, 255, 0.05);
       padding: 2rem;
-      border-radius: 12px;
+      border-radius: 16px;
       text-align: center;
       box-shadow: 0 5px 25px rgba(0,0,0,0.3);
       transition: transform 0.3s ease, background 0.3s ease;
-      animation: fadeIn 1.2s ease forwards;
     }
-
     .tool:hover {
-      transform: translateY(-8px);
+      transform: translateY(-8px) scale(1.03);
       background: rgba(255, 255, 255, 0.1);
     }
-
     .tool h3 {
       margin-bottom: 1rem;
-      font-size: 1.3rem;
+      font-size: 1.4rem;
     }
-
     .tool a {
       text-decoration: none;
       color: #00e6e6;
+      font-weight: bold;
     }
-
     .footer {
       text-align: center;
       padding: 2rem;
       background: rgba(0, 0, 0, 0.5);
       font-size: 0.9rem;
     }
-
-    /* Floating AI Icon */
     .ai-icon {
       position: fixed;
       bottom: 20px;
@@ -83,8 +79,6 @@
       box-shadow: 0 8px 20px rgba(0, 230, 230, 0.4);
       z-index: 999;
     }
-
-    /* AI Popup */
     .ai-popup {
       display: none;
       position: fixed;
@@ -97,9 +91,8 @@
       width: 320px;
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
       z-index: 998;
-      animation: slideUp 0.3s ease;
+      animation: zoomIn 0.3s ease;
     }
-
     .ai-popup textarea {
       width: 100%;
       padding: 0.5rem;
@@ -108,11 +101,9 @@
       margin-bottom: 0.5rem;
       resize: none;
     }
-
     .ai-popup input[type="file"] {
       margin-bottom: 0.5rem;
     }
-
     .ai-popup button {
       background: #00e6e6;
       border: none;
@@ -122,41 +113,24 @@
       margin-top: 0.3rem;
       font-weight: bold;
     }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.95); }
-      to { opacity: 1; transform: scale(1); }
-    }
-
-    @keyframes slideDown {
-      from { transform: translateY(-50px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
-
-    @keyframes slideUp {
-      from { transform: translateY(20px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
   </style>
 </head>
 <body>
-  <header>
+  <header class="animate__animated animate__fadeInDown">
     <h1>Smart Student Utility Hub</h1>
     <p>By Tanishq Agrawal</p>
   </header>
 
-  <main class="tools-grid">
-    <div class="tool"><h3><a href="gpa.html">🎓 GPA Calculator</a></h3></div>
-    <div class="tool"><h3><a href="resume.html">📄 Resume Builder</a></h3></div>
-    <div class="tool"><h3><a href="quiz.html">🧠 Quiz Tool</a></h3></div>
-    <div class="tool"><h3><a href="notes.html">📝 Notes Generator</a></h3></div>
-    <div class="tool"><h3><a href="ask.html">🤖 Ask AI</a></h3></div>
+  <main class="tools-grid animate__animated animate__fadeInUp">
+    <div class="tool animate__animated animate__zoomIn"><h3><a href="gpa.html">🎓 GPA Calculator</a></h3></div>
+    <div class="tool animate__animated animate__zoomIn"><h3><a href="resume.html">📄 Resume Builder</a></h3></div>
+    <div class="tool animate__animated animate__zoomIn"><h3><a href="quiz.html">🧠 Quiz Tool</a></h3></div>
+    <div class="tool animate__animated animate__zoomIn"><h3><a href="notes.html">📝 Notes Generator</a></h3></div>
+    <div class="tool animate__animated animate__zoomIn"><h3><a href="ask.html">🤖 Ask AI</a></h3></div>
   </main>
 
-  <!-- Floating AI Widget Icon -->
   <div class="ai-icon" onclick="toggleAIPopup()">🤖</div>
 
-  <!-- AI Popup -->
   <div class="ai-popup" id="aiPopup">
     <textarea placeholder="Ask AI anything..." id="aiInput" rows="3"></textarea>
     <input type="file" accept="image/*,application/pdf" />
@@ -176,10 +150,22 @@
     }
 
     function startVoice() {
-      alert("Voice input coming soon!");
+      if (!('webkitSpeechRecognition' in window)) {
+        alert("🎤 Voice recognition not supported in this browser.");
+        return;
+      }
+      const recognition = new webkitSpeechRecognition();
+      recognition.lang = "en-US";
+      recognition.start();
+      recognition.onresult = function(event) {
+        document.getElementById("aiInput").value = event.results[0][0].transcript;
+      };
+      recognition.onerror = function(event) {
+        alert("Speech recognition error: " + event.error);
+      };
     }
 
-    function askAI() {
+    async function askAI() {
       const question = document.getElementById("aiInput").value;
       const response = document.getElementById("aiResponse");
       if (!question.trim()) {
@@ -187,9 +173,27 @@
         return;
       }
       response.innerHTML = "🤖 Thinking...";
-      setTimeout(() => {
-        response.innerHTML = `🤖 AI: This is a simulated response to "<strong>${question}</strong>"`;
-      }, 1000);
+
+      try {
+        const res = await fetch("https://api.openai.com/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer YOUR_OPENAI_API_KEY"
+          },
+          body: JSON.stringify({
+            model: "gpt-3.5-turbo",
+            messages: [{ role: "user", content: question }]
+          })
+        });
+
+        const data = await res.json();
+        const reply = data.choices?.[0]?.message?.content || "No response";
+        response.innerHTML = `🤖 AI: ${reply}`;
+      } catch (err) {
+        response.innerHTML = "❌ Error reaching AI. Check your API key or connection.";
+        console.error(err);
+      }
     }
   </script>
 </body>
